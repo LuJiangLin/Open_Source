@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anssy.venturebar.base.dao.UserItemDao">
+    <resultMap id="BaseResultMap" type="com.anssy.venturebar.base.entity.UserItemEntity">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="USER_ID" property="userId" jdbcType="BIGINT"/>
+        <result column="USER_NAME" property="userName" jdbcType="VARCHAR"/>
+        <result column="SEX" property="sex" jdbcType="INTEGER"/>
+        <result column="COMPANY" property="company" jdbcType="VARCHAR"/>
+        <result column="POST" property="post" jdbcType="VARCHAR"/>
+        <result column="CONCERN" property="concern" jdbcType="VARCHAR"/>
+        <result column="REGISTER_TIME" property="registerTime"
+                jdbcType="TIMESTAMP"/>
+        <result column="ACTIVATE_TIME" property="activateTime"
+                jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, USER_ID,USER_NAME,SEX,COMPANY,POST,CONCERN,REGISTER_TIME, ACTIVATE_TIME
+    </sql>
+    <sql id="sequence_id">
+        sequence_base_userItem.nextVal
+    </sql>
+
+    <select id="findUserItemByUserId" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from BASE_USERITEM
+        where USER_ID = #{userId,jdbcType=BIGINT}
+    </select>
+
+    <select id="findRegisterNum" resultType="java.lang.Long">
+        select count(ID) from BASE_USERITEM
+        where
+        <![CDATA[ to_char(REGISTER_TIME,'yy-mm-dd hh24:mi:ss') ]]> between
+        <![CDATA[ to_char(#{0},'yy-mm-dd hh24:mi:ss') ]]>
+        and
+        <![CDATA[ to_char(#{1},'yy-mm-dd hh24:mi:ss') ]]>
+    </select>
+
+    <select id="findActivateNum" resultType="java.lang.Long">
+        select count(ID) from BASE_USERITEM
+        where
+        <![CDATA[ to_char(ACTIVATE_TIME,'yy-mm-dd hh24:mi:ss') ]]> between
+        <![CDATA[ to_char(#{0},'yy-mm-dd hh24:mi:ss') ]]>
+        and
+        <![CDATA[ to_char(#{1},'yy-mm-dd hh24:mi:ss') ]]>
+    </select>
+
+    <insert id="insertUserItem" parameterType="com.anssy.venturebar.base.entity.UserItemEntity">
+        insert into BASE_USERITEM
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                ID,
+            </if>
+            <if test="userId != null">
+                USER_ID,
+            </if>
+            <if test="userName != null">
+                USER_NAME,
+            </if>
+            <if test="sex != null">
+                SEX,
+            </if>
+            <if test="company != null">
+                COMPANY,
+            </if>
+            <if test="post != null">
+                POST,
+            </if>
+            <if test="concern != null">
+                CONCERN,
+            </if>
+            <if test="registerTime != null">
+                REGISTER_TIME,
+            </if>
+            <if test="activateTime != null">
+                ACTIVATE_TIME,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                <include refid="sequence_id"/>
+                ,
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                #{sex,jdbcType=INTEGER},
+            </if>
+            <if test="company != null">
+                #{company,jdbcType=VARCHAR},
+            </if>
+            <if test="post != null">
+                #{post,jdbcType=VARCHAR},
+            </if>
+            <if test="concern != null">
+                #{concern,jdbcType=VARCHAR},
+            </if>
+            <if test="registerTime != null">
+                #{registerTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="activateTime != null">
+                #{activateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateUserItem" parameterType="com.anssy.venturebar.base.entity.UserItemEntity">
+        update BASE_USERITEM
+        <set>
+            <if test="userId != null">
+                USER_ID = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userName != null">
+                USER_NAME=#{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                SEX=#{sex,jdbcType=INTEGER},
+            </if>
+            <if test="company != null">
+                COMPANY=#{company,jdbcType=VARCHAR},
+            </if>
+            <if test="post != null">
+                POST=#{post,jdbcType=VARCHAR},
+            </if>
+            <if test="concern != null">
+                CONCERN=#{concern,jdbcType=VARCHAR},
+            </if>
+            <if test="registerTime != null">
+                REGISTER_TIME = #{registerTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="activateTime != null">
+                ACTIVATE_TIME = #{activateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

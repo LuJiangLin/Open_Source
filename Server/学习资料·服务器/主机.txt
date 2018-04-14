@@ -1,0 +1,24 @@
+beta.j.anssy.com:18086 
+
+ 
+用户名  administrator
+密码  7rSrIdsXw9Yo82DHJ
+
+
+https://code.anssy.com/svn/team-cloud/taobaoapi
+
+数据库：
+	MySql_beta：
+			地址：beta.j.anssy.com
+			账户：anssy
+			密码：anssy
+
+	MySql_code：
+			地址：code.anssy.com
+			账户：anssydatabase
+			密码：anssy!@#wb7jgD9m%bwj!
+			
+	SQL Servler2008R2：			
+			地址：beta.j.anssy.com
+			账户：anssy
+			密码：anssy3Q

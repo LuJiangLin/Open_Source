@@ -1,0 +1,6 @@
+在锁屏Applicatio。xml   或者spring-servlet.xml中加入如下默认加载类型
+
+
+<!--默认加载方法  启动时加载-->
+           <!-- 别名                                       类的路径                       默认加载的方法-->
+    <bean id="templateAnnotationInit" class="com.lt.webcore.listener.TestTimer" init-method="showTimer"/>

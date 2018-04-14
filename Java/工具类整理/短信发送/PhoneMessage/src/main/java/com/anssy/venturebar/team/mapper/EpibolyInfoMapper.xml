@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anssy.venturebar.team.dao.EpibolyInfoDao">
+    <resultMap id="BaseResultMap" type="com.anssy.venturebar.team.entity.EpibolyInfoEntity">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="TITLE" property="title" jdbcType="VARCHAR"/>
+        <result column="FIELD" property="field" jdbcType="VARCHAR"/>
+        <result column="PROVINCE_ID" property="provinceId" jdbcType="BIGINT"/>
+        <result column="CITY_ID" property="cityId" jdbcType="BIGINT"/>
+        <result column="AREA_ID" property="areaId" jdbcType="BIGINT"/>
+        <result column="PV" property="pv" jdbcType="BIGINT"/>
+        <result column="PRAISE" property="praise" jdbcType="BIGINT"/>
+        <result column="WEIGHT" property="weight" jdbcType="BIGINT"/>
+        <result column="STATE" property="state" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, TITLE, FIELD, PROVINCE_ID, CITY_ID, AREA_ID, PV, PRAISE,WEIGHT, STATE
+    </sql>
+
+    <sql id="search_like">
+        and TITLE like '%'||#{search}||'%'
+    </sql>
+
+    <select id="findId" resultType="java.lang.Long">
+        select
+        sequence_team_epibolyInfo.nextVal from dual
+    </select>
+
+    <select id="findEpibolyInfoById" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from TEAM_EPIBOLYINFO
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+
+    <update id="updatePV" parameterType="java.lang.Long">
+        update TEAM_EPIBOLYINFO set
+        PV=PV+1 where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updatePraise" parameterType="java.lang.Long">
+        update TEAM_EPIBOLYINFO
+        set PRAISE=PRAISE+1 where ID =#{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateWeight">
+        update TEAM_EPIBOLYINFO set WEIGHT=#{1} where ID =#{0}
+    </update>
+
+    <delete id="deleteEpiboly" parameterType="java.lang.Long">
+        delete from
+        TEAM_EPIBOLYINFO where ID = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <select id="findEpibolyByField" resultMap="BaseResultMap"
+            parameterType="com.anssy.venturebar.team.vo.FieldVo">
+        select
+        <include refid="Base_Column_List"/>
+        from TEAM_EPIBOLYINFO where rowid in
+        (select rid from
+        (select rownum rn,rid from
+        (select rowid rid from TEAM_EPIBOLYINFO where STATE=1
+        <if test="search!=null">
+            <include refid="search_like"/>
+        </if>
+        <if test="fields!=null">
+            and
+            <foreach collection="fields" item="field" open="(" separator="or" close=")">
+                FIELD like '%,'||#{field}||',%'
+            </foreach>
+        </if>
+        <if test="provinceId!=null">
+            and PROVINCE_ID=#{provinceId,jdbcType=BIGINT}
+            <if test="cityId!=null">
+                and CITY_ID=#{cityId,jdbcType=BIGINT}
+                <if test="areaId!=null">
+                    and AREA_ID=#{areaId,jdbcType=BIGINT}
+                </if>
+            </if>
+        </if>
+        order by WEIGHT desc)
+        where <![CDATA[ rownum <=#{end,jdbcType=INTEGER} ]]>)
+        where <![CDATA[ rn >=#{being,jdbcType=INTEGER} ]]>)
+        order by WEIGHT desc
+    </select>
+
+    <select id="findEpibolyByPv" resultMap="BaseResultMap"
+            parameterType="com.anssy.venturebar.team.vo.PvVo">
+        select
+        <include refid="Base_Column_List"/>
+        from TEAM_EPIBOLYINFO where rowid in
+        (select rid from
+        (select rownum rn,rid from
+        (select rowid rid from TEAM_EPIBOLYINFO where STATE=1
+        <if test="search!=null">
+            <include refid="search_like"/>
+        </if>
+        <if test="provinceId!=null">
+            and PROVINCE_ID=#{provinceId,jdbcType=BIGINT}
+            <if test="cityId!=null">
+                and CITY_ID=#{cityId,jdbcType=BIGINT}
+                <if test="areaId!=null">
+                    and AREA_ID=#{areaId,jdbcType=BIGINT}
+                </if>
+            </if>
+        </if>
+        order by
+        <if test="capacityType==0">
+            PV
+        </if>
+        <if test="capacityType==1">
+            PRAISE
+        </if>
+        <if test="capacityType==2">
+            WEIGHT
+        </if>
+        desc )
+        where <![CDATA[ rownum <=#{end,jdbcType=INTEGER} ]]>)
+        where <![CDATA[ rn >=#{being,jdbcType=INTEGER} ]]>)
+        order by
+        <if test="capacityType==0">
+            PV
+        </if>
+        <if test="capacityType==1">
+            PRAISE
+        </if>
+        <if test="capacityType==2">
+            WEIGHT
+        </if>
+        desc
+    </select>
+
+    <select id="findEpibolyByNearby" resultMap="BaseResultMap"
+            parameterType="com.anssy.venturebar.team.vo.PvVo">
+        select
+        <include refid="Base_Column_List"/>
+        from TEAM_EPIBOLYINFO where rowid in
+        (select rid from
+        (select rownum rn,rid from
+        (select rowid rid from TEAM_EPIBOLYINFO where STATE=1
+        <if test="search!=null">
+            <include refid="search_like"/>
+        </if>
+        <if test="provinceId!=null">
+            and PROVINCE_ID=#{provinceId,jdbcType=BIGINT}
+            <if test="cityId!=null">
+                and CITY_ID=#{cityId,jdbcType=BIGINT}
+                <if test="areaId!=null">
+                    and AREA_ID=#{areaId,jdbcType=BIGINT}
+                </if>
+            </if>
+        </if>
+        order by ID desc)
+        where <![CDATA[ rownum <=#{end,jdbcType=INTEGER} ]]>)
+        where <![CDATA[ rn >=#{being,jdbcType=INTEGER} ]]>)
+        order by ID desc
+    </select>
+
+    <select id="referrals" resultMap="BaseResultMap"
+            parameterType="com.anssy.webcore.vo.ReferralsVo">
+        select
+        <include refid="Base_Column_List"/>
+        from TEAM_EPIBOLYINFO where rowid in
+        (select rid from
+        (select rownum rn,rid from
+        (select rowid rid from TEAM_EPIBOLYINFO where STATE=1
+        <if test="provinceId!=null">
+            and PROVINCE_ID=#{provinceId,jdbcType=BIGINT}
+            <if test="cityId!=null">
+                and CITY_ID=#{cityId,jdbcType=BIGINT}
+                <if test="areaId!=null">
+                    and AREA_ID=#{areaId,jdbcType=BIGINT}
+                </if>
+            </if>
+        </if>
+        order by PRAISE desc )
+        where <![CDATA[ rownum <=#{count,jdbcType=INTEGER} ]]>  )
+        where <![CDATA[ rn >=1 ]]>  )
+        order by PRAISE desc
+    </select>
+
+    <select id="findMyPublish" resultMap="BaseResultMap"
+            parameterType="com.anssy.webcore.vo.MyVo">
+        select
+        <include refid="Base_Column_List"/>
+        from TEAM_EPIBOLYINFO where rowid in
+        (select rid from
+        (select rownum rn,rid from
+        (select info.rowid rid from TEAM_EPIBOLYINFO info
+        left join TEAM_EPIBOLYITEM item
+        on info.ID=item.EPIBOLY_ID
+        where 1=1
+        <if test="search!=null">
+            <include refid="search_like"/>
+        </if>
+        and item.PUBLISH_ID=#{publishId,jdbcType=BIGINT}
+        order by info.ID desc)
+        where <![CDATA[ rownum <=#{end,jdbcType=INTEGER} ]]>)
+        where <![CDATA[ rn >=#{being,jdbcType=INTEGER} ]]>)
+        order by ID desc
+    </select>
+
+    <select id="findCollect" resultMap="BaseResultMap"
+            parameterType="com.anssy.webcore.vo.CollectVo">
+        select
+        <include refid="Base_Column_List"/>
+        from TEAM_EPIBOLYINFO where rowid in
+        (select rid from
+        (select rownum rn,rid from
+        (select rowid rid from TEAM_EPIBOLYINFO where 1=1
+        <if test="search!=null">
+            <include refid="search_like"/>
+        </if>
+        and ID in
+        (select FID from COLLECT_COLLECTINFO where TYPE=#{type,jdbcType=INTEGER} and
+        COLLECT_ID=#{collectId,jdbcType=BIGINT})
+        order by ID desc)
+        where <![CDATA[ rownum <=#{end,jdbcType=INTEGER} ]]>)
+        where <![CDATA[ rn >=#{being,jdbcType=INTEGER} ]]>)
+        order by ID desc
+    </select>
+
+    <insert id="insertEpibolyInfo" parameterType="com.anssy.venturebar.team.entity.EpibolyInfoEntity">
+        insert into TEAM_EPIBOLYINFO
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="title != null">
+                TITLE,
+            </if>
+            <if test="field != null">
+                FIELD,
+            </if>
+            <if test="provinceId != null">
+                PROVINCE_ID,
+            </if>
+            <if test="cityId != null">
+                CITY_ID,
+            </if>
+            <if test="areaId != null">
+                AREA_ID,
+            </if>
+            <if test="pv != null">
+                PV,
+            </if>
+            <if test="praise!=null">
+                PRAISE,
+            </if>
+            <if test="weight != null">
+                WEIGHT,
+            </if>
+            <if test="state != null">
+                STATE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="field != null">
+                #{field,jdbcType=VARCHAR},
+            </if>
+            <if test="provinceId != null">
+                #{provinceId,jdbcType=BIGINT},
+            </if>
+            <if test="cityId != null">
+                #{cityId,jdbcType=BIGINT},
+            </if>
+            <if test="areaId != null">
+                #{areaId,jdbcType=BIGINT},
+            </if>
+            <if test="pv != null">
+                #{pv,jdbcType=BIGINT},
+            </if>
+            <if test="praise!=null">
+                #{praise,jdbcType=BIGINT},
+            </if>
+            <if test="weight != null">
+                #{weight,jdbcType=BIGINT},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateEpibolyInfo" parameterType="com.anssy.venturebar.team.entity.EpibolyInfoEntity">
+        update TEAM_EPIBOLYINFO
+        set
+        TITLE=#{title,jdbcType=VARCHAR},
+        FIELD=#{field,jdbcType=VARCHAR},
+        PROVINCE_ID=#{provinceId,jdbcType=BIGINT},
+        CITY_ID=#{cityId,jdbcType=BIGINT},
+        AREA_ID=#{areaId,jdbcType=BIGINT},
+        PV=#{pv,jdbcType=BIGINT},
+        PRAISE=#{praise,jdbcType=BIGINT},
+        WEIGHT=#{weight,jdbcType=BIGINT},
+        STATE=#{state,jdbcType=INTEGER}
+        where ID=#{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

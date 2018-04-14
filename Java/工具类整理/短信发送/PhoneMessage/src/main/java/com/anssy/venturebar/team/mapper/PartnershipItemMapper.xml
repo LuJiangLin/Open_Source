@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anssy.venturebar.team.dao.PartnershipItemDao">
+    <resultMap id="BaseResultMap"
+               type="com.anssy.venturebar.team.entity.PartnershipItemEntity">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="PARTNERSHIP_ID" property="partnershipId" jdbcType="BIGINT"/>
+        <result column="DESCRIBE" property="describe" jdbcType="VARCHAR"/>
+        <result column="LINKMAN" property="linkman" jdbcType="VARCHAR"/>
+        <result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+        <result column="DIRECTION" property="direction" jdbcType="VARCHAR"/>
+        <result column="TEAM_CASE" property="teamCase" jdbcType="VARCHAR"/>
+        <result column="SITE" property="site" jdbcType="VARCHAR"/>
+        <result column="LIGHTSPOT" property="lightspot" jdbcType="VARCHAR"/>
+        <result column="PROSPECT" property="prospect" jdbcType="VARCHAR"/>
+        <result column="STAGE" property="stage" jdbcType="BIGINT"/>
+        <result column="FUND" property="fund" jdbcType="VARCHAR"/>
+        <result column="APP_URL" property="appURL" jdbcType="VARCHAR"/>
+        <result column="EMAIL" property="email" jdbcType="VARCHAR"/>
+        <result column="PUBLISH_ID" property="publishId" jdbcType="BIGINT"/>
+        <result column="PUBLISH_TIME" property="publishTime" jdbcType="TIMESTAMP"/>
+        <result column="LEAVE_NUMBER" property="leaveNumber" jdbcType="BIGINT"/>
+        <result column="COLLECT_NUMBER" property="collectNumber" jdbcType="BIGINT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, PARTNERSHIP_ID, DESCRIBE, LINKMAN, PHONE,
+        DIRECTION,TEAM_CASE,SITE,LIGHTSPOT,PROSPECT,STAGE,FUND,APP_URL,EMAIL,PUBLISH_ID,
+        PUBLISH_TIME,LEAVE_NUMBER,COLLECT_NUMBER
+    </sql>
+
+    <sql id="sequence_id">
+        sequence_team_partnershipItem.nextVal
+    </sql>
+
+    <select id="findPartnershipItem" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from TEAM_PARTNERSHIPITEM
+        where PARTNERSHIP_ID =#{partnershipId,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deletePartnership" parameterType="java.lang.Long">
+        delete from TEAM_PARTNERSHIPITEM
+        where PARTNERSHIP_ID =#{partnershipId,jdbcType=BIGINT}
+    </delete>
+
+    <update id="updateLeaveNumber" parameterType="java.lang.Long">
+        update TEAM_PARTNERSHIPITEM set LEAVE_NUMBER=LEAVE_NUMBER+1
+        where PARTNERSHIP_ID = #{partnershipId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateCollectNumber">
+        update TEAM_PARTNERSHIPITEM set COLLECT_NUMBER=COLLECT_NUMBER+#{1}
+        where PARTNERSHIP_ID= #{0}
+    </update>
+
+    <insert id="insertPartnershipItem" parameterType="com.anssy.venturebar.team.entity.PartnershipItemEntity">
+        insert into TEAM_PARTNERSHIPITEM
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                ID,
+            </if>
+            <if test="partnershipId != null">
+                PARTNERSHIP_ID,
+            </if>
+            <if test="describe != null">
+                DESCRIBE,
+            </if>
+            <if test="linkman != null">
+                LINKMAN,
+            </if>
+            <if test="phone != null">
+                PHONE,
+            </if>
+            <if test="direction != null">
+                DIRECTION,
+            </if>
+            <if test="teamCase != null">
+                TEAM_CASE,
+            </if>
+            <if test="site != null">
+                SITE,
+            </if>
+            <if test="lightspot != null">
+                LIGHTSPOT,
+            </if>
+            <if test="prospect != null">
+                PROSPECT,
+            </if>
+            <if test="stage != null">
+                STAGE,
+            </if>
+            <if test="fund != null">
+                FUND,
+            </if>
+            <if test="appURL != null">
+                APP_URL,
+            </if>
+            <if test="email != null">
+                EMAIL,
+            </if>
+            <if test="publishId != null">
+                PUBLISH_ID,
+            </if>
+            <if test="publishTime != null">
+                PUBLISH_TIME,
+            </if>
+            <if test="leaveNumber != null">
+                LEAVE_NUMBER,
+            </if>
+            <if test="collectNumber != null">
+                COLLECT_NUMBER,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                <include refid="sequence_id"/>
+                ,
+            </if>
+            <if test="partnershipId != null">
+                #{partnershipId,jdbcType=BIGINT},
+            </if>
+            <if test="describe != null">
+                #{describe,jdbcType=VARCHAR},
+            </if>
+            <if test="linkman != null">
+                #{linkman,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="direction != null">
+                #{direction,jdbcType=VARCHAR},
+            </if>
+            <if test="teamCase != null">
+                #{teamCase,jdbcType=VARCHAR},
+            </if>
+            <if test="site != null">
+                #{site,jdbcType=VARCHAR},
+            </if>
+            <if test="lightspot != null">
+                #{lightspot,jdbcType=VARCHAR},
+            </if>
+            <if test="prospect != null">
+                #{prospect,jdbcType=VARCHAR},
+            </if>
+            <if test="stage != null">
+                #{stage,jdbcType=BIGINT},
+            </if>
+            <if test="fund != null">
+                #{fund,jdbcType=VARCHAR},
+            </if>
+            <if test="appURL != null">
+                #{appURL,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="publishId != null">
+                #{publishId,jdbcType=BIGINT},
+            </if>
+            <if test="publishTime != null">
+                #{publishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="leaveNumber != null">
+                #{leaveNumber,jdbcType=BIGINT},
+            </if>
+            <if test="collectNumber != null">
+                #{collectNumber,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updatePartnershipItem" parameterType="com.anssy.venturebar.team.entity.PartnershipItemEntity">
+        update TEAM_PARTNERSHIPITEM
+        set
+        PARTNERSHIP_ID=#{partnershipId,jdbcType=BIGINT},
+        DESCRIBE=#{describe,jdbcType=VARCHAR},
+        LINKMAN=#{linkman,jdbcType=VARCHAR},
+        PHONE=#{phone,jdbcType=VARCHAR},
+        DIRECTION=#{direction,jdbcType=VARCHAR},
+        TEAM_CASE=#{teamCase,jdbcType=VARCHAR},
+        SITE=#{site,jdbcType=VARCHAR},
+        LIGHTSPOT=#{lightspot,jdbcType=VARCHAR},
+        PROSPECT=#{prospect,jdbcType=VARCHAR},
+        STAGE=#{stage,jdbcType=BIGINT},
+        FUND=#{fund,jdbcType=VARCHAR},
+        APP_URL=#{appURL,jdbcType=VARCHAR},
+        EMAIL=#{email,jdbcType=VARCHAR},
+        PUBLISH_ID=#{publishId,jdbcType=BIGINT},
+        PUBLISH_TIME=#{publishTime,jdbcType=TIMESTAMP},
+        LEAVE_NUMBER=#{leaveNumber,jdbcType=BIGINT},
+        COLLECT_NUMBER=#{collectNumber,jdbcType=BIGINT}
+        where ID=#{id,jdbcType=BIGINT}
+    </update>
+</mapper>

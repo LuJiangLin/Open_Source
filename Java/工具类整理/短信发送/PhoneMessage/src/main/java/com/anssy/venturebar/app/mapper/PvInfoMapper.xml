@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anssy.venturebar.app.dao.PvInfoDao">
+    <resultMap id="BaseResultMap" type="com.anssy.venturebar.app.entity.PvInfoEntity">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="APP_DATE" property="appDate" jdbcType="VARCHAR"/>
+        <result column="PV_HOUR" property="pvHour" jdbcType="INTEGER"/>
+        <result column="PV_NUM" property="pvNum" jdbcType="BIGINT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, APP_DATE,PV_HOUR, PV_NUM
+    </sql>
+
+    <sql id="sequence_id">
+        sequence_app_pvInfo.nextVal
+    </sql>
+
+    <select id="findPvInfo" resultMap="BaseResultMap" parameterType="com.anssy.venturebar.app.entity.PvInfoEntity">
+        select
+        <include refid="Base_Column_List"/>
+        from APP_PVINFO
+        where APP_DATE= #{appDate,jdbcType=VARCHAR}
+        and PV_HOUR=#{pvHour,jdbcType=INTEGER}
+        and rownum =1
+        order by ID desc
+    </select>
+
+    <select id="findPvByAppDate" resultType="java.lang.Long" parameterType="java.lang.String">
+        select sum(PV_NUM) from APP_PVINFO
+        where APP_DATE= #{appDate,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insertPvInfo" parameterType="com.anssy.venturebar.app.entity.PvInfoEntity">
+        insert into APP_PVINFO
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                ID,
+            </if>
+            <if test="appDate != null">
+                APP_DATE,
+            </if>
+            <if test="pvHour != null">
+                PV_HOUR,
+            </if>
+            <if test="pvNum != null">
+                PV_NUM,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                <include refid="sequence_id"/>,
+            </if>
+            <if test="appDate != null">
+                #{appDate,jdbcType=VARCHAR},
+            </if>
+            <if test="pvHour != null">
+                #{pvHour,jdbcType=INTEGER},
+            </if>
+            <if test="pvNum != null">
+                #{pvNum,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updatePvInfo" parameterType="com.anssy.venturebar.app.entity.PvInfoEntity">
+        update APP_PVINFO
+        <set>
+            PV_NUM=PV_NUM+#{pvNum,jdbcType=BIGINT},
+        </set>
+        where ID = #{id}
+    </update>
+</mapper>

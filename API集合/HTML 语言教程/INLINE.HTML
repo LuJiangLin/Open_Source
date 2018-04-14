@@ -1,0 +1,171 @@
+<HTML>
+<HEAD>
+   <TITLE>清华大学图书馆主页 - INTERNET 教室 - HTML 语言教程</TITLE>
+</HEAD>
+<BODY BGCOLOR="#D4D4D4" onLoad="alert('本页面的效果必须在 Microsoft Internet Explorer 中才能看到 :-(((')">
+
+<H1 ALIGN=CENTER>多媒体页面(Alternative Inline Elements)</H1>
+
+<CENTER><P>
+<HR></P></CENTER>
+
+<P><!--################## EMBED ########################--><A NAME="embed"></A></P>
+
+<H2><IMG SRC="br20t.gif" ALT="+" HEIGHT=20 WIDTH=20> 嵌入多媒体文本(EMBED) </H2>
+
+<P><!------Embed-------></P>
+
+<H3>基本语法 &lt;embed src=#&gt; #=URL</H3>
+
+<P>本标记可以用来在主页中嵌入多媒体文本，如：<BR>
+电影(movie), 声音(sound), 虚拟现实语言(vrml)... ... <BR>
+体会 &lt;embed&gt; 标记，您需要把 plugin 安装完备。<BR>
+请注意：embed attributes are different between each plugins. </P>
+
+<PRE>
+</PRE>
+
+<P><!--################## BACKGROUND SOUND ########################--><A NAME="bgs"></A></P>
+
+<H2><IMG SRC="br20t.gif" ALT="+" HEIGHT=20 WIDTH=20> 背景音乐 <IMG SRC="ie.gif" HEIGHT=14 WIDTH=80></H2>
+
+<P><!------bgsound-------></P>
+
+<H3>&lt;bgsound src=#&gt; #=WAV 文件的 URL<BR>
+&lt;bgsound loop=#&gt; #=循环数</H3>
+
+<DL>
+<PRE>&lt;bgsound src=&quot;sound.wav&quot; loop=3&gt;
+</PRE>
+</DL>
+
+<P><A HREF="samp/sound.html">示例</A> </P>
+
+<PRE>
+</PRE>
+
+<P><!--################## Movie ########################--><A NAME="basic"></A></P>
+
+<H2><IMG SRC="br20t.gif" ALT="+" HEIGHT=20 WIDTH=20>插入视频剪辑 <IMG SRC="ie.gif" HEIGHT=14 WIDTH=80></H2>
+
+<P><!------Basic-------></P>
+
+<H3>&lt;img src=&quot;url.gif&quot; dynsrc=&quot;url.avi&quot;&gt;</H3>
+用 url.avi 这一 AVI(Video for MS－WINDOWS) 文件来播放视频；<BR>
+用 url.gif 这一 GIF 图象作为视频的封面，即：在浏览器<BR>
+尚未完全读入 AVI 文件时，先在 AVI 播放区域显示该图象。<BR>
+
+
+<DL>
+<PRE>&lt;img src=&quot;SAMPLE-S.GIF&quot; dynsrc=&quot;SAMPLE-S.AVI&quot;&gt;
+</PRE>
+</DL>
+
+<P><IMG SRC="SAMPLE-S.GIF" dynsrc="SAMPLE-S.AVI" HEIGHT=120 WIDTH=160>
+</P>
+
+<PRE>
+</PRE>
+
+<P><!------start-------></P>
+
+<H3>何时开始播放 AVI &lt;img start=#&gt; #=fileopen, mouseover</H3>
+
+<P>缺省值是 #=fileopen，即在链接到含本标记的页面(如本页)时开始播放 AVI。<P>
+mouseover 是指您把鼠标移到 AVI 播放区域之上时才开始播放 AVI。<P>
+也可以两者同时设置：&lt;img start=fileopen,mouseover&gt;<P>
+另外，用鼠标在 AVI 播放区域点击一下，也将令浏览器开始播放该 AVI。</P>
+
+<P> </P>
+
+<DL>
+<PRE>&lt;img src=&quot;SAMPLE-S.GIF&quot; dynsrc=&quot;SAMPLE-S.AVI&quot; start=mouseover&gt;
+</PRE>
+</DL>
+
+<P><IMG SRC="SAMPLE-S.GIF" dynsrc="SAMPLE-S.AVI" start="mouseover" HEIGHT=120 WIDTH=160>
+</P>
+
+<PRE>
+</PRE>
+
+<P><!------Control-------></P>
+
+<H3>控制条 &lt;img controls&gt;</H3>
+用来在视频窗口下附加 MS－WINDOWS 的 AVI 播放控制条。
+
+<DL>
+<PRE>&lt;img src=&quot;SAMPLE-S.GIF&quot; dynsrc=&quot;SAMPLE-S.AVI&quot; controls&gt;
+</PRE>
+</DL>
+
+<P><IMG SRC="SAMPLE-S.GIF" dynsrc="SAMPLE-S.AVI" controls HEIGHT=120 WIDTH=160>
+</P>
+
+<PRE>
+</PRE>
+
+<P><!------loop-------></P>
+
+<H3>循环播放 &lt;img loop=#&gt;</H3>
+
+<P>&lt;loop=infinite&gt; 将循环播放不止。</P>
+
+<P> </P>
+
+<DL>
+<PRE>&lt;img src=&quot;SAMPLE-S.GIF&quot; dynsrc=&quot;SAMPLE-S.AVI&quot; loop=3&gt;
+</PRE>
+</DL>
+
+<P><IMG SRC="SAMPLE-S.GIF" dynsrc="SAMPLE-S.AVI" loop="3" HEIGHT=120 WIDTH=160>
+</P>
+
+<PRE>
+</PRE>
+
+<P><!------Delay-------></P>
+
+<H3>延时 &lt;img loopdelay=#&gt; #=毫秒数</H3>
+
+<DL>
+<PRE>&lt;img src=&quot;SAMPLE-S.GIF&quot; dynsrc=&quot;SAMPLE-S.AVI&quot; 
+ loop=3 loopdelay=250&gt;
+</PRE>
+</DL>
+
+<P><IMG SRC="SAMPLE-S.GIF" dynsrc="SAMPLE-S.AVI" loop="3" loopdelay="250" HEIGHT=120 WIDTH=160>
+</P>
+
+<PRE>
+</PRE>
+
+<P><!--################## (^^) Jump & Add (^^) ########################-->
+<HR><A HREF="http://ncdesign.kyushu-id.ac.jp/"><IMG SRC="angel-homeg.gif" ALT="NCD HOME" HSPACE=3 VSPACE=10 BORDER=0 HEIGHT=46 WIDTH=55 ALIGN=LEFT></A>
+<B><A HREF="../html_design.html">HTML
+Design Guide Main Page<BR>
+<NOBR></A></B><FONT FACE="'Times New Roman', Arial"><FONT SIZE=-1><A HREF="html_design.html#content">Contents</A>
+|| <A HREF="page.html">Page</A>
+|| <A HREF="font.html">Font</A>
+|| <A HREF="text_style.html">Text
+Style</A> || <A HREF="image.html">Image</A>
+|| <A HREF="form.html">Form</A>
+|| <A HREF="table.html">Table</A>
+|| <A HREF="table02.html">Table
+Advanced</A> <BR>
+|| <A HREF="frame.html">Frames</A>
+|| <A HREF="marquee.html">Marquee</A>
+|| <A HREF="inline.html">Alternative
+Inline Elements</A> <BR>
+</FONT><FONT SIZE=-2><A HREF="tag-index.html">Tag
+Index</A> || <A HREF="new.html">What's
+New</A></FONT><FONT SIZE=-1> </FONT></FONT><BR clear=all>
+</P>
+
+<P>Network Communication Design<BR>
+<A HREF="http://ncdesign.kyushu-id.ac.jp/">http://ncdesign.kyushu-id.ac.jp/<BR>
+</A>C&amp;P 1994-1996 Yuriko Ienaga <FONT SIZE=-1><A HREF="mailto:v91102@vgenda.kyushu-id.ac.jp">v91102@vgenda.kyushu-id.ac.jp</A></FONT>
+<!--################## (^^) END (^^) ########################--></P>
+
+</BODY>
+</HTML>

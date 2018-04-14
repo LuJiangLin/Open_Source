@@ -1,0 +1,71 @@
+地下连续墙项目：
+    手机端：https://v2.modao.cc/app/tL3yddJS07L5kaMB0MW3oAvRLcsHkvt#screen=sC2FBAD85991499305831002
+    后台：http://beta.j.anssy.com:8080/detectionservice
+
+河西校区同兴路校区管理系统：
+    后台：http://beta.j.anssy.com:801/school/
+    二期：http://beta.j.anssy.com:8080/school
+    
+银行积分兑换系统：
+    平板：http://116.255.175.24:1098/
+    后台：http://116.255.175.24:1099/
+    
+影楼：
+  一期：
+      手机端：http://test.anssy.com:8080/yl/
+      后台：http://test.anssy.com:8080/yl/login.html
+   二期：
+      手机端：http://beta.j.anssy.com:8989/studio/wx/toLogin
+      后台：http://beta.j.anssy.com:8989/studio/
+   
+
+党员相关的积分管理：
+  前台：http://beta.j.anssy.com:801/jf/http://beta.j.anssy.com:8080/school
+  后台：http://beta.j.anssy.com:801/jf/login-back.html
+  
+微信投票：
+   手机端：https://v2.modao.cc/app/skjLRgMHehjHnHuSfsi2H2byCts0owM
+   后台：http://beta.j.anssy.com:801/tpgl/
+   
+网吧预定系统：
+    手机：http://vip.aswk.cn/computer/wx  
+    或者：https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx024f6de48cf83505&redirect_uri=http%3A%2F%2Fvip.aswk.cn%2Fcomputer%2Fwx&response_type=code&scope=snsapi_base&state=STATE&connect_redirect=1#wechat_redirect
+    后台：http://vip.aswk.cn/computer/
+    
+    美彼后台：http://beta.j.anssy.com:801/mb/
+    移动端：https://pro.modao.cc/app/1kjygC1A0jorc0afmzd7yVFRlBlaeqr
+    
+    办公OA：http://beta.j.anssy.com:801/oa/
+    
+    无锡科然客户订单管理系统:http://beta.j.anssy.com:801/gas/
+    
+    张鑫- 进销存：http://beta.j.anssy.com:801/jxc/
+    
+    小柒快修后台：http://beta.j.anssy.com:801/repair/
+    
+    孵化器管理系统：http://beta.j.anssy.com:801/incubator
+    
+    香港升学中心ERP：http://beta.j.anssy.com:801/entrance
+    账号：test   密码：123456
+    
+    客户管理系统-借贷平台：http://beta.j.anssy.com:801/loan/
+    
+创业在线：
+        前台：http://beta.j.anssy.com:8080/hatch/begin/home
+        后台：http://beta.j.anssy.com:8080/hatch
+        账户：anssy  密码：123456
+        
+孵化器：
+        PC端 后台：   http://beta.j.anssy.com:8080/incubator 
+        手机端网页：  http://beta.j.anssy.com:8080/incubator/mobile  
+        PC端前台：    http://beta.j.anssy.com:8080/incubator/begin  
+
+        
+进销存管理系统：http://beta.j.anssy.com:801/erp
+    
+    招聘：http://beta.j.anssy.com:801/recruit/html/index.html
+    用工平台：http://beta.j.anssy.com:801/user
+    
+    进销存：http://beta.j.anssy.com:801/mac
+    
+    傻逼的Kernal：http://beta.j.anssy.com:801/kernal

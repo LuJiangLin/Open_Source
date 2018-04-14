@@ -1,0 +1,49 @@
+<link rel="stylesheet" type="text/css" href="${base}/static/diyUpload/css/webuploader.css">
+<link rel="stylesheet" type="text/css" href="${base}/static/diyUpload/css/diyUpload.css">
+<style>
+    *{ margin:0; padding:0;}
+    #box{ margin:50px auto; width:900px; min-height:600px; background:#FF9;}
+</style>
+<div id="box">
+    <div id="upload" ></div>
+</div>
+<div class="widget-body">
+    <div class="widget-main no-padding">
+        <table class="table table-striped table-bordered table-hover" style="margin-left: 20px;">
+            <tbody>
+            <#list list as obj>
+                <div style="width: 160px;height: 120px; float: left;border: 1px;border-color: #CCC;margin: 8px;">
+                    <img src="${base}/${obj.path}" alt="" width="100%" height="100%"/>
+                </div>
+            </#list>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    /*
+     * 服务器地址,成功返回,失败返回参数格式依照jquery.ajax习惯;
+     * 其他参数同WebUploader
+     */
+    $('#upload').diyUpload({
+        url:'${base}/sys/picture/upPic',
+        success:function( data ) {
+            console.info( data );
+        },
+        error:function( err ) {
+            console.info( err );
+        }
+    });
+</script>
+<script>
+    $().ready(function () {
+        var _id = $('#_id').val();
+        if (!_id) {
+            setTimeout(function () {
+                $('#_title').val('');
+            },1000);
+        }
+        sysPic.init();
+    })
+</script>

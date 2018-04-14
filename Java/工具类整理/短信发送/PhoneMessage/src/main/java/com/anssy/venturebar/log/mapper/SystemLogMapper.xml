@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anssy.venturebar.log.dao.SystemLogDao">
+    <resultMap id="BaseResultMap" type="com.anssy.venturebar.log.entity.SystemLogEntity">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="LOG_TIME" property="logTime" jdbcType="TIMESTAMP"/>
+        <result column="LOG_DESC" property="logDesc" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, LOG_TIME, LOG_DESC
+    </sql>
+    <sql id="sequence_id">
+        sequence_log_systemLog.nextVal
+    </sql>
+
+    <delete id="deleteSystemLog" parameterType="java.util.Date">
+        delete from LOG_SYSTEMLOG where
+        <![CDATA[ to_char(LOG_TIME,'yy-mm-dd hh24:mi:ss') <= to_char(#{time,jdbcType=TIMESTAMP},'yy-mm-dd hh24:mi:ss') ]]>
+    </delete>
+
+    <insert id="insertSystemLog" parameterType="com.anssy.venturebar.log.entity.SystemLogEntity">
+        insert into LOG_SYSTEMLOG
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                ID,
+            </if>
+            <if test="logTime != null">
+                LOG_TIME,
+            </if>
+            <if test="logDesc != null">
+                LOG_DESC,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                <include refid="sequence_id"/>,
+            </if>
+            <if test="logTime != null">
+                #{logTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="logDesc != null">
+                #{logDesc,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+</mapper>

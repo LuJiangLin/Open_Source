@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anssy.venturebar.technology.dao.TutorItemDao">
+    <resultMap id="BaseResultMap"
+               type="com.anssy.venturebar.technology.entity.TutorItemEntity">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="TUTOR_ID" property="tutorId" jdbcType="BIGINT"/>
+        <result column="AGE" property="age" jdbcType="INTEGER"/>
+        <result column="BG_INFO" property="bgInfo" jdbcType="VARCHAR"/>
+        <result column="URL" property="url" jdbcType="VARCHAR"/>
+        <result column="LINKMAN" property="linkman" jdbcType="VARCHAR"/>
+        <result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+        <result column="EMAIL" property="email" jdbcType="VARCHAR"/>
+        <result column="ORGANIZATION_SITE" property="organizationSite" jdbcType="VARCHAR"/>
+        <result column="PUBLISH_ID" property="publishId" jdbcType="BIGINT"/>
+        <result column="PUBLISH_TIME" property="publishTime" jdbcType="TIMESTAMP"/>
+        <result column="WILL" property="will" jdbcType="VARCHAR"/>
+        <result column="COOPERATION" property="cooperation" jdbcType="VARCHAR"/>
+        <result column="LEAVE_NUMBER" property="leaveNumber" jdbcType="BIGINT"/>
+        <result column="COLLECT_NUMBER" property="collectNumber" jdbcType="BIGINT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, TUTOR_ID, AGE, BG_INFO, URL, LINKMAN, PHONE,EMAIL,ORGANIZATION_SITE,
+        PUBLISH_ID,PUBLISH_TIME, LEAVE_NUMBER,COLLECT_NUMBER
+    </sql>
+    <sql id="sequence_id">
+        sequence_technology_tutorItem.nextVal
+    </sql>
+
+    <select id="findTutorItem" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from TECHNOLOGY_TUTORITEM
+        where TUTOR_ID = #{tutorId,jdbcType=BIGINT}
+    </select>
+
+    <update id="updateLeaveNumber" parameterType="java.lang.Long">
+        update TECHNOLOGY_TUTORITEM set LEAVE_NUMBER=LEAVE_NUMBER+1
+        where TUTOR_ID = #{tutorId,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteTutorItem" parameterType="java.lang.Long">
+        delete from TECHNOLOGY_TUTORITEM where TUTOR_ID = #{tutorId,jdbcType=BIGINT}
+    </delete>
+
+    <update id="updateCollectNumber">
+        update TECHNOLOGY_TUTORITEM set COLLECT_NUMBER=COLLECT_NUMBER+#{1}
+        where TUTOR_ID= #{0}
+    </update>
+
+    <insert id="insertTutorItem" parameterType="com.anssy.venturebar.technology.entity.TutorItemEntity">
+        insert into TECHNOLOGY_TUTORITEM
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                ID,
+            </if>
+            <if test="tutorId != null">
+                TUTOR_ID,
+            </if>
+            <if test="age != null">
+                AGE,
+            </if>
+            <if test="bgInfo != null">
+                BG_INFO,
+            </if>
+            <if test="url != null">
+                URL,
+            </if>
+            <if test="linkman != null">
+                LINKMAN,
+            </if>
+            <if test="phone != null">
+                PHONE,
+            </if>
+            <if test="email != null">
+                EMAIL,
+            </if>
+            <if test="organizationSite != null">
+                ORGANIZATION_SITE,
+            </if>
+            <if test="publishId != null">
+                PUBLISH_ID,
+            </if>
+            <if test="publishTime != null">
+                PUBLISH_TIME,
+            </if>
+            <if test="will != null">
+                WILL,
+            </if>
+            <if test="cooperation != null">
+                COOPERATION,
+            </if>
+            <if test="leaveNumber != null">
+                LEAVE_NUMBER,
+            </if>
+            <if test="collectNumber != null">
+                COLLECT_NUMBER,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                <include refid="sequence_id"/>,
+            </if>
+            <if test="tutorId != null">
+                #{tutorId,jdbcType=BIGINT},
+            </if>
+            <if test="age != null">
+                #{age,jdbcType=INTEGER},
+            </if>
+            <if test="bgInfo != null">
+                #{bgInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="linkman != null">
+                #{linkman,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="organizationSite != null">
+                #{organizationSite,jdbcType=VARCHAR},
+            </if>
+            <if test="publishId != null">
+                #{publishId,jdbcType=BIGINT},
+            </if>
+            <if test="publishTime != null">
+                #{publishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="will != null">
+                #{will,jdbcType=VARCHAR},
+            </if>
+            <if test="cooperation != null">
+                #{cooperation,jdbcType=VARCHAR},
+            </if>
+            <if test="leaveNumber != null">
+                #{leaveNumber,jdbcType=BIGINT},
+            </if>
+            <if test="collectNumber != null">
+                #{collectNumber,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateTutorItem" parameterType="com.anssy.venturebar.technology.entity.TutorItemEntity">
+        update TECHNOLOGY_TUTORITEM
+        set
+        TUTOR_ID=#{tutorId,jdbcType=BIGINT},
+        AGE=#{age,jdbcType=INTEGER},
+        BG_INFO=#{bgInfo,jdbcType=VARCHAR},
+        URL=#{url,jdbcType=VARCHAR},
+        LINKMAN=#{linkman,jdbcType=VARCHAR},
+        PHONE=#{phone,jdbcType=VARCHAR},
+        EMAIL=#{email,jdbcType=VARCHAR},
+        ORGANIZATION_SITE=#{organizationSite,jdbcType=VARCHAR},
+        PUBLISH_ID=#{publishId,jdbcType=BIGINT},
+        PUBLISH_TIME=#{publishTime,jdbcType=TIMESTAMP},
+        WILL=#{will,jdbcType=VARCHAR},
+        COOPERATION=#{cooperation,jdbcType=VARCHAR},
+        LEAVE_NUMBER=#{leaveNumber,jdbcType=BIGINT},
+        COLLECT_NUMBER=#{collectNumber,jdbcType=BIGINT}
+        where ID=#{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

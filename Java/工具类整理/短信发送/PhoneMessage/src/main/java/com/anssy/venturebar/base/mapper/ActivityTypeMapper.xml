@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anssy.venturebar.base.dao.ActivityTypeDao">
+    <resultMap id="BaseResultMap" type="com.anssy.venturebar.base.entity.ActivityTypeEntity">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="ACTIVITY_NAME" property="activityName" jdbcType="VARCHAR"/>
+        <result column="ACTIVITY_LEVEL" property="activityLevel" jdbcType="INTEGER"/>
+        <result column="FATHER_ID" property="fatherId" jdbcType="BIGINT"/>
+        <result column="STYLE" property="style" jdbcType="VARCHAR"/>
+        <result column="MARK" property="mark" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, ACTIVITY_NAME, ACTIVITY_LEVEL, FATHER_ID,STYLE,MARK
+    </sql>
+    <select id="findActivityType" resultMap="BaseResultMap" parameterType="com.anssy.inter.activity.vo.TypeVo">
+        select
+        <include refid="Base_Column_List"/>
+        from BASE_ACTIVITYTYPE
+        where
+        ACTIVITY_LEVEL=#{activityLevel,jdbcType=INTEGER}
+        and
+        FATHER_ID=#{fatherId,jdbcType=BIGINT}
+    </select>
+
+    <select id="findActivityTypeAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from BASE_ACTIVITYTYPE
+    </select>
+
+    <select id="findActivityTypeById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from BASE_ACTIVITYTYPE where ID=#{id,jdbcType=BIGINT}
+    </select>
+
+</mapper>

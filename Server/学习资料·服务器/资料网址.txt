@@ -1,0 +1,28 @@
+Weblogic部署项目三种方式：http://blog.csdn.net/magi1201/article/details/46280507
+
+tomcat体积小，weblogic非常庞大，为什么公司要用那么大weblogic,却不用tomcat呢？
+http://bbs.csdn.net/topics/390247394
+
+深度开源java：http://www.open-open.com/code/
+
+java对redis的基本操作：http://www.cnblogs.com/edisonfeng/p/3571870.html
+
+FontAwesome 4.1.0 中完整的439个图标样式CSS参考 ：http://www.yeahzan.com/fa/facss.html
+
+网站模板（站长之家）：http://sc.chinaz.com/moban/
+
+源码之家：http://www.mycodes.net/153/16.htm
+
+码云：https://gitee.com/search?utf8=%E2%9C%93&search=%E6%A1%86%E6%9E%B6&group_id=&project_id=&type=
+
+微信支付流程：http://blog.csdn.net/xuelinmei_happy/article/details/47022281
+
+菜鸟教程：http://www.runoob.com/
+
+W3C地址：https://www.w3cschool.cn/download
+
+公网搭建OPEN VPN:http://blog.csdn.net/u014704893/article/details/52876805
+
+IDEA学习使用基础版教程：http://blog.csdn.net/qq_32588349/article/details/51461182
+
+GitHub的账户：18772101110@163.com   密码：606.j.,i

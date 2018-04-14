@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anssy.venturebar.log.dao.LoginLogDao">
+    <resultMap id="BaseResultMap" type="com.anssy.venturebar.log.entity.LoginLogEntity">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="USER_ID" property="userId" jdbcType="BIGINT"/>
+        <result column="LOGIN_TIME" property="loginTime" jdbcType="TIMESTAMP"/>
+        <result column="LOGOUT_TIME" property="logoutTime" jdbcType="TIMESTAMP"/>
+        <result column="PHONE_TERRACE" property="phoneTerrace" jdbcType="VARCHAR"/>
+        <result column="PHONE_VERSION" property="phoneVersion" jdbcType="VARCHAR"/>
+        <result column="APP_VERSION" property="appVersion" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, USER_ID, LOGIN_TIME, LOGOUT_TIME,
+        PHONE_TERRACE,PHONE_VERSION,APP_VERSION
+    </sql>
+    <sql id="sequence_id">
+        sequence_log_loginLog.nextVal
+    </sql>
+
+    <select id="findLoginLogByUserId" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from (
+        select
+        <include refid="Base_Column_List"/>
+        from LOG_LOGINLOG
+        where USER_ID= #{userId,jdbcType=BIGINT} and LOGOUT_TIME is null
+        order by ID desc
+        ) where rownum= 1
+    </select>
+
+    <delete id="deleteLoginLog" parameterType="java.util.Date">
+        delete from LOG_LOGINLOG where
+        <![CDATA[ to_char(LOGIN_TIME,'yy-mm-dd hh24:mi:ss') <= to_char(#{time,jdbcType=TIMESTAMP},'yy-mm-dd hh24:mi:ss') ]]>
+    </delete>
+
+    <select id="findLoginNum" resultType="java.lang.Long">
+        select count(ID) from LOG_LOGINLOG
+        where
+        <![CDATA[ to_char(LOGIN_TIME,'yy-mm-dd hh24:mi:ss') ]]> between
+        <![CDATA[ to_char(#{0},'yy-mm-dd hh24:mi:ss') ]]>
+        and
+        <![CDATA[ to_char(#{1},'yy-mm-dd hh24:mi:ss') ]]>
+    </select>
+
+    <insert id="insertLoginLog" parameterType="com.anssy.venturebar.log.entity.LoginLogEntity">
+        insert into LOG_LOGINLOG
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                ID,
+            </if>
+            <if test="userId != null">
+                USER_ID,
+            </if>
+            <if test="loginTime != null">
+                LOGIN_TIME,
+            </if>
+            <if test="logoutTime != null">
+                LOGOUT_TIME,
+            </if>
+            <if test="phoneTerrace != null">
+                PHONE_TERRACE,
+            </if>
+            <if test="phoneVersion != null">
+                PHONE_VERSION,
+            </if>
+            <if test="appVersion != null">
+                APP_VERSION,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                <include refid="sequence_id"/>,
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="loginTime != null">
+                #{loginTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="logoutTime != null">
+                #{logoutTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="phoneTerrace != null">
+                #{phoneTerrace,jdbcType=VARCHAR},
+            </if>
+            <if test="phoneVersion != null">
+                #{phoneVersion,jdbcType=VARCHAR},
+            </if>
+            <if test="appVersion != null">
+                #{appVersion,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateLoginLog" parameterType="com.anssy.venturebar.log.entity.LoginLogEntity">
+        update LOG_LOGINLOG
+        <set>
+            <if test="userId != null">
+                USER_ID = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="loginTime != null">
+                LOGIN_TIME = #{loginTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="logoutTime != null">
+                LOGOUT_TIME = #{logoutTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="phoneTerrace != null">
+                PHONE_TERRACE = #{phoneTerrace,jdbcType=VARCHAR},
+            </if>
+            <if test="phoneVersion != null">
+                PHONE_VERSION = #{phoneVersion,jdbcType=VARCHAR},
+            </if>
+            <if test="appVersion != null">
+                APP_VERSION = #{appVersion,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>

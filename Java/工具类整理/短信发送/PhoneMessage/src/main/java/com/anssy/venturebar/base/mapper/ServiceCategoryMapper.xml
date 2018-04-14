@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anssy.venturebar.base.dao.ServiceCategoryDao">
+    <resultMap id="BaseResultMap" type="com.anssy.venturebar.base.entity.ServiceCategoryEntity">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="SERVICE_NAME" property="serviceName" jdbcType="VARCHAR"/>
+        <result column="SERVICE_LEVEL" property="serviceLevel" jdbcType="INTEGER"/>
+        <result column="FATHER_ID" property="fatherId" jdbcType="BIGINT"/>
+        <result column="STYLE" property="style" jdbcType="VARCHAR"/>
+        <result column="MARK" property="mark" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, SERVICE_NAME, SERVICE_LEVEL, FATHER_ID,STYLE,MARK
+    </sql>
+
+    <select id="findServiceCategory" resultMap="BaseResultMap"
+            parameterType="com.anssy.inter.service.vo.ServiceCategoryVo">
+        select
+        <include refid="Base_Column_List"/>
+        from BASE_SERVICECATEGORY
+        where SERVICE_LEVEL=#{serviceLevel,jdbcType=INTEGER}
+        and FATHER_ID=#{fatherId,jdbcType=BIGINT}
+    </select>
+
+    <select id="findServiceCategoryAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from BASE_SERVICECATEGORY
+    </select>
+
+    <select id="findServiceCategoryById" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from BASE_SERVICECATEGORY where ID=#{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="findServiceCategoryByFatherId" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from BASE_SERVICECATEGORY where FATHER_ID=#{fatherId,jdbcType=BIGINT}
+    </select>
+
+</mapper>

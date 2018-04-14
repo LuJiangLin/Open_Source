@@ -1,0 +1,129 @@
+ <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>  
+    <!DOCTYPE html>  
+    <html>  
+    <head>  
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">  
+    <title>小夜的传说最新力作！</title>  
+    <style type="text/css">  
+    * {  
+        padding: 0px;  
+        margin: 0px;  
+    }  
+      
+    body {  
+        background: #394E48;  
+        font-size: 14px;  
+        font-family: "微软雅黑";  
+    }  
+      
+    .title {  
+        text-align: center;  
+        color: #fff;  
+        margin-top: 50px;  
+    }  
+      
+    .demo {  
+        width: 900px;  
+        height: 140px;  
+        margin: 50px auto;  
+    }  
+      
+    .drag-area {  
+        width: 100%;  
+        height: 100px;  
+        border: 3px dashed #fff;  
+        text-align: center;  
+        line-height: 100px;  
+        color: #fff;  
+        font-size: 36px;  
+        font-weight: 700;  
+    }  
+      
+    }  
+    .preview div {  
+        width: 195px;  
+        overflow: hidden;  
+        border: 1px dashed silver;  
+        margin-top: 10px;  
+        float: left;  
+        padding: 9px;  
+        text-align: center;  
+        height: 168px;  
+    }  
+      
+    .preview img {  
+        width: 80px;  
+        height: 80px;  
+    }  
+    </style>  
+    </head>  
+    <body>  
+        <h1 class="title">小夜的传说最新力作！Java实现拖拽上传！！</h1>  
+         <div class="demo">  
+            <div class="drag-area" id="upload-area">  
+                将图片拖拽到这里  
+            </div>  
+            <!-- 图片预览 -->  
+            <div id="preview" class="preview"></div>  
+         </div>  
+    </body>  
+    <script type="text/javascript">  
+        //1、文件上传HTML5 通过drag把文件拖拽到浏览器的默认事件覆盖  
+        //文件离开  
+        document.ondragleave=function(e){  
+        e.preventDefault();  
+            console.info("文件离开执行了我！！");  
+        };  
+        //鼠标松开文件  
+        document.ondrop=function(e){  
+        e.preventDefault();  
+            console.info("松开以后执行了我！");  
+        };  
+        //鼠标移动文件  
+        document.ondragover=function(e){  
+        e.preventDefault();  
+            console.info("文件移动以后执行了我！");  
+        };  
+          
+        function tm_upload(){  
+            var img1="";  
+            var uploadArea=document.getElementById("upload-area");  
+            //2、通过HTML5拖拽事件，ondrop，然后通过拖动区域监听浏览器的drop事件达到文件上传的目的  
+            uploadArea.addEventListener("drop", function(e){  
+                e.preventDefault();  
+                //3、从事件event中获取拖拽到浏览器的文件信息  
+                var fileList=e.dataTransfer.files;  
+                for(var i=0;i<fileList.length;i++){  
+                    //此处判断只能上传图片  
+                    if(fileList[i].type.indexOf("image")!=0){  
+                        alert("请上传图片");  
+                        return;               
+                    }  
+                    //图片预览  这一步需要判断是什么浏览器  大家自己判断吧  
+                    /*************************************/  
+                    img1=window.URL.createObjectURL(fileList[i]);  
+                    /*************************************/  
+                    var str="<div><img src='"+img1+"'/><p>"+fileList[i].name+"</p></div>";  
+                    document.getElementById("preview").innerHTML +=str;  
+                      
+                    var fileName=fileList[i].name;  
+                    console.info(fileName);  
+                    var fileSize=fileList[i].size;  
+                    console.info(fileSize);  
+                    //4、通过XMLHttpRequest上传文件到服务器  就是一个ajax请求  
+                    var xhr=new XMLHttpRequest();  
+                    //5、这里需要先写好一个data.jsp的上传文件，当然，你写成servlet或者是action都可以  
+                    xhr.open("post","data.jsp",true);  
+                    xhr.setRequestHeader("X-Request-Width", "XMLHttpRequest");  
+                    //6、通过HTML5 FormData动态设置表单元素  
+                    var formData=new FormData();//动态给表单赋值，传递二进制文件  
+                    //其实就相当于<input type="file" name="file"/>  
+                    formData.append("doc",fileList[i]);  
+                    xhr.send(formData);  
+                }  
+            });  
+        }  
+        //直接调用  
+        tm_upload();  
+    </script>  
+    </html>  

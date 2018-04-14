@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <title>首页 - 用户管理</title>
+    <%include("base/mate.html"){} %>
+    <link href="${base}/vendor/umeditor1_2_2-utf8-jsp/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" charset="utf-8" src="${base}/vendor/umeditor1_2_2-utf8-jsp/umeditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="${base}/vendor/umeditor1_2_2-utf8-jsp/umeditor.min.js"> </script>
+    <script type="text/javascript" charset="utf-8" src="${base}/vendor/umeditor1_2_2-utf8-jsp/lang/zh-cn/zh-cn.js"></script>
+
+
+    <style>
+        img {
+            width: auto;
+            height: auto;
+            max-height: 120px;
+            max-width: 260px;
+            vertical-align: middle;
+        }
+
+        .bigpic {
+            width: 260px;
+            height: 120px;
+            border: #dadada solid 1px;
+            padding: 1px;
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+        }
+    </style>
+
+</head>
+<body>
+<!--用于页面渲染未完成之间显示加载中 -->
+<div id="loading"><img src="${base}/images/loading.gif">Loading...</div>
+
+<table id="dg" title="所有广告列表" class="easyui-datagrid"
+       style="width: 100%; height: auto" url="${base}/admin/searchAdvMgr"
+       toolbar="#toolbar" pagination="true"
+       fitColumns="true" singleSelect="true">
+    <thead>
+    <tr>
+        <th field="id" width="70" >ID</th>
+        <th field="adName" width="70" >资讯标题</th>
+        <th field="adTitle" width="40">资讯预览文字</th>
+       <!-- <th field="reviewStatus" width="40" formatter="f2">审核状态</th>-->
+    </tr>
+    </thead>
+</table>
+
+<div id="toolbar">
+    <div style="padding: 5px">
+        <a href="javascript:void(0)" class="easyui-linkbutton c1"
+           iconCls="icon-add" onclick="add()">添加</a> <a
+            href="javascript:void(0)" class="easyui-linkbutton c1"
+            iconCls="icon-edit" onclick="updateAdv()">修改</a> <a
+            href="javascript:void(0)" class="easyui-linkbutton c1"
+            iconCls="icon-clear" onclick="delAdv()">删除</a>
+    </div>
+
+    <div id="tb" style="padding: 5px">
+        广告名称：
+        <input id="adName" style="height: 20px; border: 1px solid #ccc">
+
+
+        <a href="#" class="easyui-linkbutton"
+           data-options="iconCls:'icon-search'" onclick="doSearch()">搜索</a>
+    </div>
+</div>
+
+
+<!--广告编辑开始-->
+<div id="advAdd" class="easyui-window"
+     data-options="modal:true,closed:true,iconCls:'icon-save',footer:'#ft',maximized:true"
+     style="width: 700px; height: 500px; padding: 0px;">
+
+    <div class="easyui-layout" id="cc" style="width:auto;height:100%">
+        <div id="p" data-options="region:'west'" title="" style="width:50%;padding:10px">
+            <div style="padding: 10px 60px 20px 60px">
+
+                    <table cellpadding="5" border="0">
+                        <tr>
+                            <td width="100px" align="left">资讯图片预览:</td>
+                            <td>
+                                <div class="bigpic">
+                                    <img id="showAdvImg" src="${base}/images/pic-none.png"/>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td width="100px" align="left">资讯图片:</td>
+                            <td>
+                                <form id="uploadform" enctype="multipart/form-data" method="post">
+                                <input id="advfile" name="file" type="file" style="width: 220px">
+
+                                <a href="javascript:void(0) " onclick="savefile()" style="width:90px" style="height: 24px" >上传</a>
+                            </form>
+                            </td>
+                        </tr>
+                        </table>
+                        <form id="addWin" method="post">
+                            <table cellpadding="5" border="0">
+                            <!--广告ID-->
+                                <input name="id" hidden="true">
+                                <input type="hidden" id="adContentImg" name="adContentImg"  value=" ">
+
+                            <tr>
+                            <td width="100px" align="left">资讯标题:</td>
+                            <td><input class="easyui-textbox" data-options="required:true" type="text" name="adName"
+                                       style="width: 200px"></input>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>资讯预览文字:</td>
+                            <td colspan="3"><input class="easyui-textbox"
+                                                   data-options="required:true,validType:{length:[0,32]}" type="text"
+                                                   id="b" name="adTitle"
+                                                   style="width: 200px;"></input>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>资讯内容:</td>
+                            <td colspan="3">
+                                <script type="text/plain" id="myEditor" style="width:300px;height:240px;">
+
+</script>                       <input type="text" value="" name="adContent" id="adContent" style="display: none">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2"><hr></td>
+                        </tr>
+                    </table>
+                        </form>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+<div id="ft" style="padding: 5px; text-align: center">
+    <a href="#" class="easyui-linkbutton c6"
+       data-options="iconCls:'icon-ok'" onclick="save()">保存</a>
+    <a
+            href="javascript:void(0)" class="easyui-linkbutton"
+            data-options="iconCls:'icon-cancel'"
+            onclick="$('#advAdd').window('close')">关闭</a>
+</div>
+<!--广告编辑结束-->
+
+<script type="text/javascript">
+    var um = UM.getEditor('myEditor');
+
+    var path = "";
+    function savefile() {
+        $('#uploadform').form('submit', {
+            type: "post",
+            url: '${base}/game/upload/web',
+            success: function (result) {
+                var result = eval('(' + result + ')');
+                path = result.path;
+                alert(path)
+                $("#showAdvImg").attr("src",path);
+                $("#adContentImg").val(path);
+                if (result.error_msg) {
+                    $.messager.show({
+                        title: '错误',
+                        msg: result.error_msg
+                    });
+                } else {
+                    $.messager.show({
+                        title: '提示',
+                        msg: '上传成功！'
+                    });
+                    //
+
+                }
+            }
+        });
+    }
+
+    var url = "";               //表示修改或者添加的地址
+    var adv_id = "";            //当前查看的广告ID
+    var competitionModel = null;  //红包类型：1-随机红包 2-分期红包
+
+    $(document).ready(function () {
+        //隐藏遮罩层
+        $("#loading").hide();
+
+        $('#dg').datagrid({
+            onDblClickRow: function (index, row) {
+                updateAdv();    //双击显示编辑窗口
+            }
+        });
+
+        //当显示日期，改变触发事件
+        $('#showDays').numberbox({
+            onChange: function(newValue,oldValue){
+                jisuan_day_count(newValue);
+            }
+        });
+    });
+
+
+
+
+    //删除广告
+    function delAdv() {
+        var row = $('#dg').datagrid('getSelected');
+
+        if (row != null) {
+
+            $.messager.confirm('确认', '确认删除?', function (r) {
+                if (r) {
+                    $.ajax({
+                        type: "POST",
+                        url: "${base}/admin/deleteAdv",
+                        dataType: 'json',
+                        data: 'id=' + row.id,
+                        success: function (data) {
+                            if(data.status ==1){
+                                $('#dg').datagrid('reload');
+                            }else if(data.status ==0){
+                                alert("删除失败！");
+                            }
+
+                        }
+                    });
+                }
+            });
+
+        } else {
+            $.messager.alert('提示', '请选择！');
+        }
+    }
+
+    //查询
+    function doSearch() {
+        $('#dg').datagrid('load', {
+            adName: $('#adName').val(),
+            status: $('#a').val(),
+            merchantId: $('#advMerchantId').combo('getValue'),
+            reviewStatus: $('#reviewStatus').val()
+        });
+    }
+
+    //点添加弹出框
+    function add() {
+        url = "${base}/admin/ad_publish";
+        //新增红包，隐藏查看广告红包被拆情况
+        $('#advUserContent').hide();
+        //红包部分解除不可以编辑限制（修改的时候置为不可编辑了）
+
+        $('#advAdd').dialog('open').dialog('center').dialog('setTitle', '添加广告');
+        $('#advAdd').form('clear');
+        $('#myCategory').combobox('setValue', '0');
+        $('#isOnce').combobox('setValue', '0');
+        $('#uploadform').form('clear');
+        $("#showAdvImg").attr("src", "${base}/images/pic-none.png");
+    }
+
+    //点修改按钮
+    function updateAdv() {
+
+        url = "${base}/admin/updateAdv";
+        var row = $('#dg').datagrid('getSelected');
+
+        adv_id = row.id;
+
+        $('#advAdd').form('clear');
+        $('#advAdd').form('load', row);
+        $.get('${base}/admin/findAdvByID', {id: row.id},
+            function (data) {
+                $('#advAdd').dialog('open').dialog('center').dialog('setTitle', '修改广告');
+                //图片URL
+                $("#adContentImg").attr("src", data.adContentImg);
+                //图片显示
+                $("#showAdvImg").attr("src", data.adContentImg);
+                $("#myEditor").html(data.adContent);
+
+            });
+    }
+
+
+
+    //保存新增
+    function save() {
+       url = "${base}"+url;
+       content = UM.getEditor('myEditor').getContent();
+        if(content == ''){
+            alert("请编辑文本内容后保存！");
+        }else{
+$("#adContent").val(content)
+        }
+
+        $('#addWin').form('submit', {
+            url: url,
+            onSubmit: function (param) {
+                var f = $(this).form('validate');
+                if(f == false){
+                    return false;
+                }
+
+                //广告图片路径
+                if ($("#imgurl").val() == '') {
+                    $.messager.alert('提示', '请选择广告图片！');
+                    return false;
+                }
+            },
+            success: function (data) {
+                data = jQuery.parseJSON(data);
+                if (data.status == 1) {
+                    $('#advAdd').window('close');
+                    $('#dg').datagrid('reload');
+                } else {
+                    $.messager.alert('错误', data.error_msg);
+                }
+
+            },
+            fail: function (msg) {
+                $.messager.alert('系统提示', '操作失败!');
+            }
+        });
+
+    }
+
+
+
+
+    //格式化表格
+    function f2(val, row) {
+        if (val == 0) {
+            return "<font color='orange'>等待审核</font>";
+        } else if (val == 1) {
+            return "<font color='green'>审核中</font>";
+        } else if (val == 2) {
+            return "<font color='green'>审核通过</font>";
+        } else if (val == 3) {
+            return "<font color='red'>审核不通过</font>";
+        }
+    }
+
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anssy.venturebar.team.dao.EpibolyItemDao">
+    <resultMap id="BaseResultMap" type="com.anssy.venturebar.team.entity.EpibolyItemEntity">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="EPIBOLY_ID" property="epibolyId" jdbcType="BIGINT"/>
+        <result column="DESCRIBE" property="describe" jdbcType="VARCHAR"/>
+        <result column="LINKMAN" property="linkman" jdbcType="VARCHAR"/>
+        <result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+        <result column="PUBLISH_ID" property="publishId" jdbcType="BIGINT"/>
+        <result column="PUBLISH_TIME" property="publishTime" jdbcType="TIMESTAMP"/>
+        <result column="LEAVE_NUMBER" property="leaveNumber" jdbcType="BIGINT"/>
+        <result column="COLLECT_NUMBER" property="collectNumber" jdbcType="BIGINT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, EPIBOLY_ID, DESCRIBE, LINKMAN, PHONE, PUBLISH_ID,
+        PUBLISH_TIME,LEAVE_NUMBER,COLLECT_NUMBER
+    </sql>
+    <sql id="sequence_id">
+        sequence_team_epibolyItem.nextVal
+    </sql>
+
+    <select id="findEpibolyItem" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from TEAM_EPIBOLYITEM
+        where EPIBOLY_ID = #{epibolyId,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteEpibolyItem" parameterType="java.lang.Long">
+        delete from TEAM_EPIBOLYITEM where EPIBOLY_ID = #{epibolyId,jdbcType=BIGINT}
+    </delete>
+
+    <update id="updateLeaveNumber" parameterType="java.lang.Long">
+        update TEAM_EPIBOLYITEM set LEAVE_NUMBER=LEAVE_NUMBER+1
+        where EPIBOLY_ID = #{epibolyId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateCollectNumber">
+        update TEAM_EPIBOLYITEM set COLLECT_NUMBER=COLLECT_NUMBER+#{1}
+        where EPIBOLY_ID= #{0}
+    </update>
+
+    <insert id="insertEpibolyItem" parameterType="com.anssy.venturebar.team.entity.EpibolyItemEntity">
+        insert into TEAM_EPIBOLYITEM
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                ID,
+            </if>
+            <if test="epibolyId != null">
+                EPIBOLY_ID,
+            </if>
+            <if test="describe != null">
+                DESCRIBE,
+            </if>
+            <if test="linkman != null">
+                LINKMAN,
+            </if>
+            <if test="phone != null">
+                PHONE,
+            </if>
+            <if test="publishId != null">
+                PUBLISH_ID,
+            </if>
+            <if test="publishTime != null">
+                PUBLISH_TIME,
+            </if>
+            <if test="leaveNumber != null">
+                LEAVE_NUMBER,
+            </if>
+            <if test="collectNumber != null">
+                COLLECT_NUMBER,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                <include refid="sequence_id"/>,
+            </if>
+            <if test="epibolyId != null">
+                #{epibolyId,jdbcType=BIGINT},
+            </if>
+            <if test="describe != null">
+                #{describe,jdbcType=VARCHAR},
+            </if>
+            <if test="linkman != null">
+                #{linkman,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="publishId != null">
+                #{publishId,jdbcType=BIGINT},
+            </if>
+            <if test="publishTime != null">
+                #{publishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="leaveNumber != null">
+                #{leaveNumber,jdbcType=BIGINT},
+            </if>
+            <if test="collectNumber != null">
+                #{collectNumber,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateEpibolyItem" parameterType="com.anssy.venturebar.team.entity.EpibolyItemEntity">
+        update TEAM_EPIBOLYITEM
+        set
+        EPIBOLY_ID=#{epibolyId,jdbcType=BIGINT},
+        DESCRIBE=#{describe,jdbcType=VARCHAR},
+        LINKMAN=#{linkman,jdbcType=VARCHAR},
+        PHONE=#{phone,jdbcType=VARCHAR},
+        PUBLISH_ID=#{publishId,jdbcType=BIGINT},
+        PUBLISH_TIME=#{publishTime,jdbcType=TIMESTAMP},
+        LEAVE_NUMBER=#{leaveNumber,jdbcType=BIGINT},
+        COLLECT_NUMBER=#{collectNumber,jdbcType=BIGINT}
+        where ID=#{id,jdbcType=BIGINT}
+    </update>
+</mapper>

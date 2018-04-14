@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anssy.venturebar.base.dao.ProvinceDao">
+    <resultMap id="BaseResultMap" type="com.anssy.venturebar.base.entity.ProvinceEntity">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="PROVINCE_ID" property="provinceId" jdbcType="BIGINT"/>
+        <result column="PROVINCE" property="province" jdbcType="VARCHAR"/>
+        <result column="SHOW_INDEX" property="showIndex" jdbcType="INTEGER"/>
+        <result column="OPT_FLAG" property="optFlag" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="AreaVoMap" type="com.anssy.venturebar.base.vo.AreaVo">
+        <result column="PROVINCE_ID" property="areaId" jdbcType="BIGINT"/>
+        <result column="PROVINCE" property="areaName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, PROVINCE_ID, PROVINCE, SHOW_INDEX, OPT_FLAG
+    </sql>
+
+    <select id="findProvince" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from BASE_PROVINCE
+        where OPT_FLAG=1
+        order by SHOW_INDEX asc
+    </select>
+
+    <select id="findProvinceAreaVoAll" resultMap="AreaVoMap">
+        select PROVINCE_ID, PROVINCE from BASE_PROVINCE
+    </select>
+
+    <select id="findProvinceIdByName" parameterType="java.lang.String"
+            resultType="java.lang.Long">
+        select distinct PROVINCE_ID from BASE_PROVINCE
+        where PROVINCE like '%'||#{name}||'%' and rownum=1
+    </select>
+
+    <select id="findProvinceByProvinceId" parameterType="java.lang.Long"
+            resultType="java.lang.String">
+        select PROVINCE
+        from BASE_PROVINCE
+        where PROVINCE_ID=#{provinceId,jdbcType=BIGINT}
+    </select>
+
+</mapper>

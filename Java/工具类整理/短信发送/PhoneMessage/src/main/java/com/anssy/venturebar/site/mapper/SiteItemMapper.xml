@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anssy.venturebar.site.dao.SiteItemDao">
+    <resultMap id="BaseResultMap" type="com.anssy.venturebar.site.entity.SiteItemEntity">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="SITE_ID" property="siteId" jdbcType="BIGINT"/>
+        <result column="LINKMAN" property="linkman" jdbcType="VARCHAR"/>
+        <result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+        <result column="DESCRIBE" property="describe" jdbcType="VARCHAR"/>
+        <result column="SITE_ADDRESS" property="siteAddress" jdbcType="VARCHAR"/>
+        <result column="FITMENT" property="fitment" jdbcType="VARCHAR"/>
+        <result column="DIRECTION" property="direction" jdbcType="VARCHAR"/>
+        <result column="STOREY" property="storey" jdbcType="VARCHAR"/>
+        <result column="PROPERTY" property="property" jdbcType="VARCHAR"/>
+        <result column="YEARS" property="years" jdbcType="VARCHAR"/>
+        <result column="URL" property="url" jdbcType="VARCHAR"/>
+        <result column="PUBLISH_ID" property="publishId" jdbcType="BIGINT"/>
+        <result column="PUBLISH_TIME" property="publishTime" jdbcType="TIMESTAMP"/>
+        <result column="LEAVE_NUMBER" property="leaveNumber" jdbcType="BIGINT"/>
+        <result column="COLLECT_NUMBER" property="collectNumber" jdbcType="BIGINT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, SITE_ID, LINKMAN, PHONE, DESCRIBE,
+        SITE_ADDRESS,FITMENT,DIRECTION,
+        STOREY,PROPERTY,YEARS, URL, PUBLISH_ID,
+        PUBLISH_TIME, LEAVE_NUMBER,COLLECT_NUMBER
+    </sql>
+    <sql id="sequence_id">
+        sequence_site_siteItem.nextVal
+    </sql>
+
+    <select id="findSiteItemById" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from SITE_SITEITEM
+        where SITE_ID = #{siteId,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteSiteItem" parameterType="java.lang.Long">
+        delete from SITE_SITEITEM
+        where SITE_ID= #{siteId,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteAllSiteItem">
+        delete from SITE_SITEITEM
+    </delete>
+
+    <update id="updateLeaveNumber" parameterType="java.lang.Long">
+        update SITE_SITEITEM set LEAVE_NUMBER=LEAVE_NUMBER+1
+        where SITE_ID= #{siteId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateCollectNumber">
+        update SITE_SITEITEM set COLLECT_NUMBER=COLLECT_NUMBER+#{1}
+        where SITE_ID= #{0}
+    </update>
+
+    <insert id="insertSiteItem" parameterType="com.anssy.venturebar.site.entity.SiteItemEntity">
+        insert into SITE_SITEITEM
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                ID,
+            </if>
+            <if test="siteId != null">
+                SITE_ID,
+            </if>
+            <if test="linkman != null">
+                LINKMAN,
+            </if>
+            <if test="phone != null">
+                PHONE,
+            </if>
+            <if test="describe != null">
+                DESCRIBE,
+            </if>
+            <if test="siteAddress != null">
+                SITE_ADDRESS,
+            </if>
+            <if test="fitment != null">
+                FITMENT,
+            </if>
+            <if test="direction != null">
+                DIRECTION,
+            </if>
+            <if test="storey != null">
+                STOREY,
+            </if>
+            <if test="property != null">
+                PROPERTY,
+            </if>
+            <if test="years != null">
+                YEARS,
+            </if>
+            <if test="url != null">
+                URL,
+            </if>
+            <if test="publishId != null">
+                PUBLISH_ID,
+            </if>
+            <if test="publishTime != null">
+                PUBLISH_TIME,
+            </if>
+            <if test="leaveNumber != null">
+                LEAVE_NUMBER,
+            </if>
+            <if test="collectNumber != null">
+                COLLECT_NUMBER,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                <include refid="sequence_id"/>
+                ,
+            </if>
+            <if test="siteId != null">
+                #{siteId,jdbcType=BIGINT},
+            </if>
+            <if test="linkman != null">
+                #{linkman,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="describe != null">
+                #{describe,jdbcType=VARCHAR},
+            </if>
+            <if test="siteAddress != null">
+                #{siteAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="fitment != null">
+                #{fitment,jdbcType=VARCHAR},
+            </if>
+            <if test="direction != null">
+                #{direction,jdbcType=VARCHAR},
+            </if>
+            <if test="storey != null">
+                #{storey,jdbcType=VARCHAR},
+            </if>
+            <if test="property != null">
+                #{property,jdbcType=VARCHAR},
+            </if>
+            <if test="years != null">
+                #{years,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="publishId != null">
+                #{publishId,jdbcType=BIGINT},
+            </if>
+            <if test="publishTime != null">
+                #{publishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="leaveNumber != null">
+                #{leaveNumber,jdbcType=BIGINT},
+            </if>
+            <if test="collectNumber != null">
+                #{collectNumber,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateSiteItem"
+            parameterType="com.anssy.venturebar.site.entity.SiteItemEntity">
+        update SITE_SITEITEM
+        set
+        SITE_ID=#{siteId,jdbcType=BIGINT},
+        LINKMAN=#{linkman,jdbcType=VARCHAR},
+        PHONE=#{phone,jdbcType=VARCHAR},
+        DESCRIBE=#{describe,jdbcType=VARCHAR},
+        SITE_ADDRESS=#{siteAddress,jdbcType=VARCHAR},
+        FITMENT=#{fitment,jdbcType=VARCHAR},
+        DIRECTION=#{direction,jdbcType=VARCHAR},
+        STOREY=#{storey,jdbcType=VARCHAR},
+        PROPERTY=#{property,jdbcType=VARCHAR},
+        YEARS=#{years,jdbcType=VARCHAR},
+        URL=#{url,jdbcType=VARCHAR},
+        PUBLISH_ID=#{publishId,jdbcType=BIGINT},
+        PUBLISH_TIME=#{publishTime,jdbcType=TIMESTAMP},
+        LEAVE_NUMBER=#{leaveNumber,jdbcType=BIGINT},
+        COLLECT_NUMBER=#{collectNumber,jdbcType=BIGINT}
+        where ID=#{id,jdbcType=BIGINT}
+    </update>
+</mapper>

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anssy.venturebar.invest.dao.InvestorItemDao">
+    <resultMap id="BaseResultMap"
+               type="com.anssy.venturebar.invest.entity.InvestorItemEntity">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="INVESTOR_ID" property="investorId" jdbcType="BIGINT"/>
+        <result column="CALLING_CARD" property="callingCard" jdbcType="VARCHAR"/>
+        <result column="INVEST_INTRO" property="investIntro" jdbcType="VARCHAR"/>
+        <result column="EMAIL" property="email" jdbcType="VARCHAR"/>
+        <result column="COMPANY_SITE" property="companySite" jdbcType="VARCHAR"/>
+        <result column="SUCCESSFUL_CASE" property="successfulCase"
+                jdbcType="VARCHAR"/>
+        <result column="INVEST_WAY" property="investWay" jdbcType="INTEGER"/>
+        <result column="WAY" property="way" jdbcType="VARCHAR"/>
+        <result column="INVEST_TYPE" property="investType" jdbcType="INTEGER"/>
+        <result column="INVEST_SUM" property="investSum" jdbcType="VARCHAR"/>
+        <result column="DEADLINE" property="deadline" jdbcType="VARCHAR"/>
+        <result column="FOCUS" property="focus" jdbcType="VARCHAR"/>
+        <result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+        <result column="OTHER" property="other" jdbcType="VARCHAR"/>
+        <result column="LINKMAN" property="linkman" jdbcType="VARCHAR"/>
+        <result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+        <result column="URL" property="url" jdbcType="VARCHAR"/>
+        <result column="PUBLISH_ID" property="publishId" jdbcType="BIGINT"/>
+        <result column="PUBLISH_TIME" property="publishTime" jdbcType="TIMESTAMP"/>
+        <result column="LEAVE_NUMBER" property="leaveNumber" jdbcType="BIGINT"/>
+        <result column="COLLECT_NUMBER" property="collectNumber"
+                jdbcType="BIGINT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, INVESTOR_ID, CALLING_CARD, INVEST_INTRO,
+        EMAIL,COMPANY_SITE,SUCCESSFUL_CASE, INVEST_WAY, WAY,
+        INVEST_TYPE, INVEST_SUM, DEADLINE, FOCUS, REMARK,OTHER,
+        LINKMAN,PHONE,URL,PUBLISH_ID, PUBLISH_TIME,
+        LEAVE_NUMBER,COLLECT_NUMBER
+    </sql>
+    <sql id="sequence_id">
+        sequence_invest_investorItem.nextVal
+    </sql>
+
+    <select id="findInvestorItem" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from INVEST_INVESTORITEM
+        where INVESTOR_ID =
+        #{investorId,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteInvestorItem" parameterType="java.lang.Long">
+        delete from
+        INVEST_INVESTORITEM where INVESTOR_ID = #{investorId,jdbcType=BIGINT}
+    </delete>
+
+    <update id="updateLeaveNumber" parameterType="java.lang.Long">
+        update
+        INVEST_INVESTORITEM set LEAVE_NUMBER=LEAVE_NUMBER+1
+        where INVESTOR_ID =
+        #{investorId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateCollectNumber">
+        update INVEST_INVESTORITEM set
+        COLLECT_NUMBER=COLLECT_NUMBER+#{1}
+        where INVESTOR_ID= #{0}
+    </update>
+
+    <insert id="insertInvestorItem" parameterType="com.anssy.venturebar.invest.entity.InvestorItemEntity">
+        insert into INVEST_INVESTORITEM
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                ID,
+            </if>
+            <if test="investorId != null">
+                INVESTOR_ID,
+            </if>
+            <if test="callingCard != null">
+                CALLING_CARD,
+            </if>
+            <if test="investIntro != null">
+                INVEST_INTRO,
+            </if>
+            <if test="email != null">
+                EMAIL,
+            </if>
+            <if test="companySite != null">
+                COMPANY_SITE,
+            </if>
+            <if test="successfulCase != null">
+                SUCCESSFUL_CASE,
+            </if>
+            <if test="investWay != null">
+                INVEST_WAY,
+            </if>
+            <if test="way != null">
+                WAY,
+            </if>
+            <if test="investType != null">
+                INVEST_TYPE,
+            </if>
+            <if test="investSum != null">
+                INVEST_SUM,
+            </if>
+            <if test="deadline != null">
+                DEADLINE,
+            </if>
+            <if test="focus != null">
+                FOCUS,
+            </if>
+            <if test="remark != null">
+                REMARK,
+            </if>
+            <if test="other != null">
+                OTHER,
+            </if>
+            <if test="linkman != null">
+                LINKMAN,
+            </if>
+            <if test="phone != null">
+                PHONE,
+            </if>
+            <if test="url != null">
+                URL,
+            </if>
+            <if test="publishId != null">
+                PUBLISH_ID,
+            </if>
+            <if test="publishTime != null">
+                PUBLISH_TIME,
+            </if>
+            <if test="leaveNumber != null">
+                LEAVE_NUMBER,
+            </if>
+            <if test="collectNumber != null">
+                COLLECT_NUMBER,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                <include refid="sequence_id"/>,
+            </if>
+            <if test="investorId != null">
+                #{investorId,jdbcType=BIGINT},
+            </if>
+            <if test="callingCard != null">
+                #{callingCard,jdbcType=VARCHAR},
+            </if>
+            <if test="investIntro != null">
+                #{investIntro,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="companySite != null">
+                #{companySite,jdbcType=VARCHAR},
+            </if>
+            <if test="successfulCase != null">
+                #{successfulCase,jdbcType=VARCHAR},
+            </if>
+            <if test="investWay != null">
+                #{investWay,jdbcType=INTEGER},
+            </if>
+            <if test="way != null">
+                #{way,jdbcType=VARCHAR},
+            </if>
+            <if test="investType != null">
+                #{investType,jdbcType=INTEGER},
+            </if>
+            <if test="investSum != null">
+                #{investSum,jdbcType=VARCHAR},
+            </if>
+            <if test="deadline != null">
+                #{deadline,jdbcType=VARCHAR},
+            </if>
+            <if test="focus != null">
+                #{focus,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="other != null">
+                #{other,jdbcType=VARCHAR},
+            </if>
+            <if test="linkman != null">
+                #{linkman,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="publishId != null">
+                #{publishId,jdbcType=BIGINT},
+            </if>
+            <if test="publishTime != null">
+                #{publishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="leaveNumber != null">
+                #{leaveNumber,jdbcType=BIGINT},
+            </if>
+            <if test="collectNumber != null">
+                #{collectNumber,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateInvestorItem" parameterType="com.anssy.venturebar.invest.entity.InvestorItemEntity">
+        update INVEST_INVESTORITEM
+        set
+        INVESTOR_ID=#{investorId,jdbcType=BIGINT},
+        CALLING_CARD=#{callingCard,jdbcType=VARCHAR},
+        INVEST_INTRO=#{investIntro,jdbcType=VARCHAR},
+        EMAIL=#{email,jdbcType=VARCHAR},
+        COMPANY_SITE=#{companySite,jdbcType=VARCHAR},
+        SUCCESSFUL_CASE=#{successfulCase,jdbcType=VARCHAR},
+        INVEST_WAY=#{investWay,jdbcType=INTEGER},
+        WAY=#{way,jdbcType=VARCHAR},
+        INVEST_TYPE=#{investType,jdbcType=INTEGER},
+        INVEST_SUM=#{investSum,jdbcType=VARCHAR},
+        DEADLINE=#{deadline,jdbcType=VARCHAR},
+        FOCUS=#{focus,jdbcType=VARCHAR},
+        REMARK=#{remark,jdbcType=VARCHAR},
+        OTHER=#{other,jdbcType=VARCHAR},
+        LINKMAN=#{linkman,jdbcType=VARCHAR},
+        PHONE=#{phone,jdbcType=VARCHAR},
+        URL=#{url,jdbcType=VARCHAR},
+        PUBLISH_ID=#{publishId,jdbcType=BIGINT},
+        PUBLISH_TIME=#{publishTime,jdbcType=TIMESTAMP},
+        LEAVE_NUMBER=#{leaveNumber,jdbcType=BIGINT},
+        COLLECT_NUMBER=#{collectNumber,jdbcType=BIGINT}
+        where ID=#{id,jdbcType=BIGINT}
+    </update>
+</mapper>

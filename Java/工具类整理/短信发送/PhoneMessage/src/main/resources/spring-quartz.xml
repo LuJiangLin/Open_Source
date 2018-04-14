@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+    <!--  启动定时任务 -->
+    <bean id="quartzFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+          destroy-method="destroy">
+        <property name="triggers">
+            <list>
+                <ref bean="refreshCacheQuartz"/>
+                <ref bean="highFrequencyQuartz"/>
+                <ref bean="dayQuartz"/>
+                <ref bean="syncQuartz"/>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 调度定时任务 执行定时器(刷新缓存)-->
+    <bean id="refreshCacheQuartz" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="refreshCachequency"/>
+        </property>
+        <property name="cronExpression">
+            <value>0 0/10 * * * ?"</value>
+        </property>
+    </bean>
+    <!-- 调度定时任务 执行定时器(同步创业在线数据)-->
+    <bean id="syncQuartz" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="syncServer"/>
+        </property>
+        <property name="cronExpression">
+            <value>0 0/5 * * * ?"</value>
+        </property>
+    </bean>
+    <!-- 调度定时任务 执行定时器(高频率) -->
+    <bean id="highFrequencyQuartz" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="highFrequency"/>
+        </property>
+        <property name="cronExpression">
+            <value>0/20 * * * * ?"</value>
+        </property>
+    </bean>
+    <!-- 调度定时任务 执行定时器(每天执行一次) -->
+    <bean id="dayQuartz" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="everyDayquency"/>
+        </property>
+        <property name="cronExpression">
+            <value>59 59 01 * * ?"</value>
+        </property>
+    </bean>
+
+    <!-- 声明定时器任务的执行方法定时器(刷新缓存) -->
+    <bean id="refreshCachequency" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="quartzServer"/>
+        </property>
+        <property name="targetMethod">
+            <value>refreshCache</value>
+        </property>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <!-- 声明定时器任务的执行方法定时器(同步创业在线数据) -->
+    <bean id="syncServer" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="quartzServer"/>
+        </property>
+        <property name="targetMethod">
+            <value>everyHour</value>
+        </property>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <!-- 声明定时器任务的执行方法定时器(高频率) -->
+    <bean id="highFrequency" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="quartzServer"/>
+        </property>
+        <property name="targetMethod">
+            <value>highFrequency</value>
+        </property>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <!-- 声明定时器任务的执行方法定时器(每天执行一次) -->
+    <bean id="everyDayquency" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="quartzServer"/>
+        </property>
+        <property name="targetMethod">
+            <value>everyDay</value>
+        </property>
+    </bean>
+
+</beans>

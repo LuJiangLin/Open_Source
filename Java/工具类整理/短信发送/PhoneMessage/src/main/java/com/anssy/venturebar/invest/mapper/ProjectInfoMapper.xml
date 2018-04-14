@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anssy.venturebar.invest.dao.ProjectInfoDao">
+    <resultMap id="BaseResultMap" type="com.anssy.venturebar.invest.entity.ProjectInfoEntity">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="IMAGE" property="image" jdbcType="VARCHAR"/>
+        <result column="TITLE" property="title" jdbcType="VARCHAR"/>
+        <result column="SKETCH" property="sketch" jdbcType="VARCHAR"/>
+        <result column="FIELD" property="field" jdbcType="VARCHAR"/>
+        <result column="PROVINCE_ID" property="provinceId" jdbcType="BIGINT"/>
+        <result column="CITY_ID" property="cityId" jdbcType="BIGINT"/>
+        <result column="AREA_ID" property="areaId" jdbcType="BIGINT"/>
+        <result column="LONGITUDE" property="longitude" jdbcType="VARCHAR"/>
+        <result column="LATITUDE" property="latitude" jdbcType="VARCHAR"/>
+        <result column="GEOHASH" property="geohash" jdbcType="VARCHAR"/>
+        <result column="PV" property="pv" jdbcType="BIGINT"/>
+        <result column="PRAISE" property="praise" jdbcType="BIGINT"/>
+        <result column="WEIGHT" property="weight" jdbcType="BIGINT"/>
+        <result column="STATE" property="state" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, IMAGE, TITLE, SKETCH, FIELD, PROVINCE_ID, CITY_ID,
+        AREA_ID,LONGITUDE, LATITUDE,GEOHASH, PV, PRAISE,WEIGHT, STATE
+    </sql>
+    <sql id="search_like">
+        and TITLE like '%'||#{search}||'%'
+    </sql>
+
+    <select id="findId" resultType="java.lang.Long">
+        select
+        sequence_invest_projectInfo.nextVal from dual
+    </select>
+
+    <select id="findProjectInfoById" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from INVEST_PROJECTINFO
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+
+    <update id="updatePV" parameterType="java.lang.Long">
+        update INVEST_PROJECTINFO
+        set PV=PV+1 where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updatePraise" parameterType="java.lang.Long">
+        update
+        INVEST_PROJECTINFO set PRAISE=PRAISE+1 where ID =
+        #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateWeight">
+        update INVEST_PROJECTINFO set WEIGHT=#{1} where ID =#{0}
+    </update>
+
+    <delete id="deleteProjectInfo" parameterType="java.lang.Long">
+        delete from INVEST_PROJECTINFO
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteAllProjectInfo">
+        delete from INVEST_PROJECTINFO
+    </delete>
+
+    <select id="findListByGPS" resultMap="BaseResultMap"
+            parameterType="com.anssy.webcore.vo.GPSVo">
+        select
+        <include refid="Base_Column_List"/>
+        from INVEST_PROJECTINFO where STATE=1
+        <if test="search!=null">
+            <include refid="search_like"/>
+        </if>
+        and GEOHASH like CONCAT(#{geohash},'%')
+    </select>
+
+    <select id="findListByField" resultMap="BaseResultMap"
+            parameterType="com.anssy.venturebar.invest.vo.FieldVo">
+        select
+        <include refid="Base_Column_List"/>
+        from INVEST_PROJECTINFO where rowid in
+        (select rid from
+        (select rownum rn,rid from
+        (select rowid rid from INVEST_PROJECTINFO where STATE=1
+        <if test="search!=null">
+            <include refid="search_like"/>
+        </if>
+        <if test="fields!=null">
+            and
+            <foreach collection="fields" item="field" open="(" separator="or" close=")">
+                FIELD like '%,'||#{field}||',%'
+            </foreach>
+        </if>
+        <if test="provinceId!=null">
+            and PROVINCE_ID=#{provinceId,jdbcType=BIGINT}
+            <if test="cityId!=null">
+                and CITY_ID=#{cityId,jdbcType=BIGINT}
+                <if test="areaId!=null">
+                    and AREA_ID=#{areaId,jdbcType=BIGINT}
+                </if>
+            </if>
+        </if>
+        order by WEIGHT desc)
+        where <![CDATA[ rownum <=#{end,jdbcType=INTEGER} ]]>)
+        where <![CDATA[ rn >=#{being,jdbcType=INTEGER} ]]>)
+        order by WEIGHT desc
+    </select>
+
+    <select id="findListByPv" resultMap="BaseResultMap"
+            parameterType="com.anssy.venturebar.invest.vo.PvVo">
+        select
+        <include refid="Base_Column_List"/>
+        from INVEST_PROJECTINFO where rowid in
+        (select rid from
+        (select rownum rn,rid from
+        (select rowid rid from INVEST_PROJECTINFO where STATE=1
+        <if test="search!=null">
+            <include refid="search_like"/>
+        </if>
+        <if test="provinceId!=null">
+            and PROVINCE_ID=#{provinceId,jdbcType=BIGINT}
+            <if test="cityId!=null">
+                and CITY_ID=#{cityId,jdbcType=BIGINT}
+                <if test="areaId!=null">
+                    and AREA_ID=#{areaId,jdbcType=BIGINT}
+                </if>
+            </if>
+        </if>
+        order by
+        <if test="capacityType==0">
+            PV
+        </if>
+        <if test="capacityType==1">
+            PRAISE
+        </if>
+        <if test="capacityType==2">
+            WEIGHT
+        </if>
+        desc )
+        where <![CDATA[ rownum <=#{end,jdbcType=INTEGER} ]]>)
+        where <![CDATA[ rn >=#{being,jdbcType=INTEGER} ]]>)
+        order by
+        <if test="capacityType==0">
+            PV
+        </if>
+        <if test="capacityType==1">
+            PRAISE
+        </if>
+        <if test="capacityType==2">
+            WEIGHT
+        </if>
+        desc
+    </select>
+
+    <select id="referrals" resultMap="BaseResultMap"
+            parameterType="com.anssy.webcore.vo.ReferralsVo">
+        select
+        <include refid="Base_Column_List"/>
+        from INVEST_PROJECTINFO where rowid in
+        (select rid from
+        (select rownum rn,rid from
+        (select rowid rid from INVEST_PROJECTINFO where STATE=1
+        <if test="provinceId!=null">
+            and PROVINCE_ID=#{provinceId,jdbcType=BIGINT}
+            <if test="cityId!=null">
+                and CITY_ID=#{cityId,jdbcType=BIGINT}
+                <if test="areaId!=null">
+                    and AREA_ID=#{areaId,jdbcType=BIGINT}
+                </if>
+            </if>
+        </if>
+        order by PRAISE desc )
+        where <![CDATA[ rownum <=#{count,jdbcType=INTEGER} ]]>  )
+        where <![CDATA[ rn >=1 ]]>  )
+        order by PRAISE desc
+    </select>
+
+    <select id="findMyPublish" resultMap="BaseResultMap"
+            parameterType="com.anssy.webcore.vo.MyVo">
+        select
+        <include refid="Base_Column_List"/>
+        from INVEST_PROJECTINFO where rowid in
+        (select rid from
+        (select rownum rn,rid from
+        (select info.rowid rid from INVEST_PROJECTINFO info
+        left join INVEST_PROJECTITEM item
+        on info.ID=item.PROJECT_ID
+        where 1=1
+        <if test="search!=null">
+            <include refid="search_like"/>
+        </if>
+        and item.PUBLISH_ID=#{publishId,jdbcType=BIGINT}
+        order by info.ID desc)
+        where <![CDATA[ rownum <=#{end,jdbcType=INTEGER} ]]>)
+        where <![CDATA[ rn >=#{being,jdbcType=INTEGER} ]]>)
+        order by ID desc
+    </select>
+
+    <select id="findCollect" resultMap="BaseResultMap"
+            parameterType="com.anssy.webcore.vo.CollectVo">
+        select
+        <include refid="Base_Column_List"/>
+        from INVEST_PROJECTINFO where rowid in
+        (select rid from
+        (select rownum rn,rid from
+        (select rowid rid from INVEST_PROJECTINFO where 1=1
+        <if test="search!=null">
+            <include refid="search_like"/>
+        </if>
+        and ID in
+        (select FID from COLLECT_COLLECTINFO where TYPE=#{type,jdbcType=INTEGER} and
+        COLLECT_ID=#{collectId,jdbcType=BIGINT})
+        order by ID desc)
+        where <![CDATA[ rownum <=#{end,jdbcType=INTEGER} ]]>)
+        where <![CDATA[ rn >=#{being,jdbcType=INTEGER} ]]>)
+        order by ID desc
+    </select>
+
+    <insert id="insertProjectInfo" parameterType="com.anssy.venturebar.invest.entity.ProjectInfoEntity">
+        insert into INVEST_PROJECTINFO
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="image != null">
+                IMAGE,
+            </if>
+            <if test="title != null">
+                TITLE,
+            </if>
+            <if test="sketch != null">
+                SKETCH,
+            </if>
+            <if test="field != null">
+                FIELD,
+            </if>
+            <if test="provinceId != null">
+                PROVINCE_ID,
+            </if>
+            <if test="cityId != null">
+                CITY_ID,
+            </if>
+            <if test="areaId != null">
+                AREA_ID,
+            </if>
+            <if test="longitude != null">
+                LONGITUDE,
+            </if>
+            <if test="latitude != null">
+                LATITUDE,
+            </if>
+            <if test="geohash != null">
+                GEOHASH,
+            </if>
+            <if test="pv != null">
+                PV,
+            </if>
+            <if test="praise != null">
+                PRAISE,
+            </if>
+            <if test="weight != null">
+                WEIGHT,
+            </if>
+            <if test="state != null">
+                STATE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="image != null">
+                #{image,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="sketch != null">
+                #{sketch,jdbcType=VARCHAR},
+            </if>
+            <if test="field != null">
+                #{field,jdbcType=VARCHAR},
+            </if>
+            <if test="provinceId != null">
+                #{provinceId,jdbcType=BIGINT},
+            </if>
+            <if test="cityId != null">
+                #{cityId,jdbcType=BIGINT},
+            </if>
+            <if test="areaId != null">
+                #{areaId,jdbcType=BIGINT},
+            </if>
+            <if test="longitude != null">
+                #{longitude,jdbcType=VARCHAR},
+            </if>
+            <if test="latitude != null">
+                #{latitude,jdbcType=VARCHAR},
+            </if>
+            <if test="geohash != null">
+                #{geohash,jdbcType=VARCHAR},
+            </if>
+            <if test="pv != null">
+                #{pv,jdbcType=BIGINT},
+            </if>
+            <if test="praise != null">
+                #{praise,jdbcType=BIGINT},
+            </if>
+            <if test="weight != null">
+                #{weight,jdbcType=BIGINT},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateProjectInfo" parameterType="com.anssy.venturebar.invest.entity.ProjectInfoEntity">
+        update INVEST_PROJECTINFO
+        set
+        IMAGE= #{image,jdbcType=VARCHAR},
+        TITLE= #{title,jdbcType=VARCHAR},
+        SKETCH= #{sketch,jdbcType=VARCHAR},
+        FIELD=#{field,jdbcType=VARCHAR},
+        PROVINCE_ID= #{provinceId,jdbcType=BIGINT},
+        CITY_ID= #{cityId,jdbcType=BIGINT},
+        AREA_ID=#{areaId,jdbcType=BIGINT},
+        LONGITUDE= #{longitude,jdbcType=VARCHAR},
+        LATITUDE=#{latitude,jdbcType=VARCHAR},
+        GEOHASH=#{geohash,jdbcType=VARCHAR},
+        PV=#{pv,jdbcType=BIGINT},
+        PRAISE= #{praise,jdbcType=BIGINT},
+        WEIGHT=#{weight,jdbcType=BIGINT},
+        STATE=#{state,jdbcType=INTEGER}
+        where ID=#{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

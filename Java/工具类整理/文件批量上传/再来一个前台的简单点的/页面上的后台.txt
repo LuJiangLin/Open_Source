@@ -1,0 +1,45 @@
+ <%@page import="java.util.UUID"%>  
+    <%@page import="org.apache.commons.fileupload.FileItem"%>  
+    <%@page import="java.util.Iterator"%>  
+    <%@page import="java.util.List"%>  
+    <%@page import="org.apache.commons.fileupload.servlet.ServletFileUpload"%>  
+    <%@page import="org.apache.commons.fileupload.disk.DiskFileItemFactory"%>  
+    <%@page import="org.apache.commons.fileupload.FileItemFactory"%>  
+    <%@page import="java.io.File"%>  
+    <%@ page language="java" contentType="text/html; charset=UTF-8"  
+        pageEncoding="UTF-8"%>  
+    <%  
+    /*  
+    1、文件上传:  
+      
+    */  
+    request.setCharacterEncoding("utf-8");  
+    response.setCharacterEncoding("utf-8");  
+    //获取文件路径  
+    String strPath=request.getRealPath("/")+"/upload";  
+    File file =new File(strPath);  
+    if(!file.exists())file.mkdirs();  
+    FileItemFactory factory=new DiskFileItemFactory();  
+    ServletFileUpload upload=new ServletFileUpload(factory);  
+    //从请求对象中获取文件信息  
+    List items= upload.parseRequest(request);  
+    if(items!=null){  
+        for(int i=0;i<items.size();i++){  
+            Iterator iterator=items.iterator();  
+            while(iterator.hasNext()){  
+            FileItem item=(FileItem)iterator.next();  
+            if(item.isFormField()){  
+                continue;  
+            }else{  
+                String fileName=item.getName();  
+                Long fileSize=item.getSize();  
+                int pos=fileName.indexOf(".");  
+                String ext=fileName.substring(pos,fileName.length());     
+                fileName=UUID.randomUUID().toString()+ext;  
+                File saveFile=new File(strPath,fileName);  
+                item.write(saveFile);  
+             }  
+            }  
+        }  
+    }  
+     %>  

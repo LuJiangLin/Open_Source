@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anssy.venturebar.service.dao.PolicyElucidationDao">
+    <resultMap id="BaseResultMap"
+               type="com.anssy.venturebar.service.entity.PolicyElucidationEntity">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="IMAGE" property="image" jdbcType="VARCHAR"/>
+        <result column="TITLE" property="title" jdbcType="VARCHAR"/>
+        <result column="PUBLISH_ID" property="publishId" jdbcType="BIGINT"/>
+        <result column="PUBLISH_TIME" property="publishTime" jdbcType="TIMESTAMP"/>
+        <result column="DETAILS" property="details" jdbcType="CLOB"
+                javaType="java.lang.String"/>
+        <result column="SOURCE" property="source" jdbcType="VARCHAR"/>
+        <result column="URL" property="url" jdbcType="VARCHAR"/>
+        <result column="PV" property="pv" jdbcType="BIGINT"/>
+        <result column="PRAISE" property="praise" jdbcType="BIGINT"/>
+        <result column="WEIGHT" property="weight" jdbcType="BIGINT"/>
+        <result column="LEAVE_NUMBER" property="leaveNumber" jdbcType="BIGINT"/>
+        <result column="COLLECT_NUMBER" property="collectNumber" jdbcType="BIGINT"/>
+        <result column="STATE" property="state" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="listMap" type="com.anssy.venturebar.service.vo.PEVo">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="IMAGE" property="image" jdbcType="VARCHAR"/>
+        <result column="TITLE" property="title" jdbcType="VARCHAR"/>
+        <result column="PUBLISH_TIME" property="publishTime" jdbcType="TIMESTAMP"/>
+        <result column="SOURCE" property="source" jdbcType="VARCHAR"/>
+        <result column="PV" property="pv" jdbcType="BIGINT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID,IMAGE, TITLE, PUBLISH_ID, PUBLISH_TIME,DETAILS, SOURCE, URL,
+        PV,PRAISE,WEIGHT,LEAVE_NUMBER,COLLECT_NUMBER,STATE
+    </sql>
+    <sql id="search_list">
+        ID,IMAGE, TITLE, PUBLISH_TIME, SOURCE,PV
+    </sql>
+    <sql id="sequence_id">
+        sequence_policyElucidation.nextVal
+    </sql>
+    <sql id="search_like">
+        and TITLE like '%'||#{search}||'%'
+    </sql>
+
+    <select id="findPolicyElucidationById" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from SERVICE_POLICYELUCIDATION
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+
+    <update id="updatePV" parameterType="java.lang.Long">
+        update SERVICE_POLICYELUCIDATION
+        set PV=PV+1 where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updatePraise" parameterType="java.lang.Long">
+        update SERVICE_POLICYELUCIDATION set
+        PRAISE=PRAISE+1 where
+        ID=#{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateWeight">
+        update SERVICE_POLICYELUCIDATION set WEIGHT=#{1} where ID =#{0}
+    </update>
+
+    <update id="updateLeaveNumber" parameterType="java.lang.Long">
+        update SERVICE_POLICYELUCIDATION set LEAVE_NUMBER=LEAVE_NUMBER+1
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+
+    <update id="updateCollectNumber">
+        update SERVICE_POLICYELUCIDATION set COLLECT_NUMBER=COLLECT_NUMBER+#{1}
+        where ID= #{0}
+    </update>
+
+    <delete id="deletePolicy" parameterType="java.lang.Long">
+        delete from SERVICE_POLICYELUCIDATION
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <select id="findList" resultMap="listMap" parameterType="com.anssy.venturebar.service.vo.PvVo">
+        select
+        <include refid="search_list"/>
+        from SERVICE_POLICYELUCIDATION where rowid in
+        (select rid from
+        (select rownum rn,rid from
+        (select rowid rid from SERVICE_POLICYELUCIDATION where STATE=1
+        <if test="search!=null">
+            <include refid="search_like"/>
+        </if>
+        order by
+        <if test="capacityType==0">
+            PV
+        </if>
+        <if test="capacityType==1">
+            PRAISE
+        </if>
+        <if test="capacityType==2">
+            WEIGHT
+        </if>
+        desc )
+        where <![CDATA[ rownum <=#{end,jdbcType=INTEGER} ]]>)
+        where <![CDATA[ rn >=#{being,jdbcType=INTEGER} ]]>)
+        order by
+        <if test="capacityType==0">
+            PV
+        </if>
+        <if test="capacityType==1">
+            PRAISE
+        </if>
+        <if test="capacityType==2">
+            WEIGHT
+        </if>
+        desc
+    </select>
+
+    <select id="referrals" resultMap="listMap"
+            parameterType="com.anssy.webcore.vo.ReferralsVo">
+        select
+        <include refid="search_list"/>
+        from SERVICE_POLICYELUCIDATION where rowid in
+        (select rid from
+        (select rownum rn,rid from
+        (select rowid rid from SERVICE_POLICYELUCIDATION where STATE=1 order by PRAISE desc )
+        where <![CDATA[ rownum <=#{count,jdbcType=INTEGER} ]]>  )
+        where <![CDATA[ rn >=1 ]]>  )
+        order by PRAISE desc
+    </select>
+
+    <select id="findMyPublish" resultMap="listMap"
+            parameterType="com.anssy.webcore.vo.MyVo">
+        select
+        <include refid="search_list"/>
+        from SERVICE_POLICYELUCIDATION where rowid in
+        (select rid from
+        (select rownum rn,rid from
+        (select rowid rid from SERVICE_POLICYELUCIDATION
+        where 1=1
+        <if test="search!=null">
+            <include refid="search_like"/>
+        </if>
+        and PUBLISH_ID=#{publishId,jdbcType=BIGINT}
+        order by ID desc)
+        where <![CDATA[ rownum <=#{end,jdbcType=INTEGER} ]]>)
+        where <![CDATA[ rn >=#{being,jdbcType=INTEGER} ]]>)
+        order by ID desc
+    </select>
+
+    <select id="findCollect" resultMap="listMap"
+            parameterType="com.anssy.webcore.vo.CollectVo">
+        select
+        <include refid="search_list"/>
+        from SERVICE_POLICYELUCIDATION where rowid in
+        (select rid from
+        (select rownum rn,rid from
+        (select rowid rid from SERVICE_POLICYELUCIDATION where 1=1
+        <if test="search!=null">
+            <include refid="search_like"/>
+        </if>
+        and ID in
+        (select FID from COLLECT_COLLECTINFO where TYPE=#{type,jdbcType=INTEGER} and
+        COLLECT_ID=#{collectId,jdbcType=BIGINT})
+        order by ID desc)
+        where <![CDATA[ rownum <=#{end,jdbcType=INTEGER} ]]>)
+        where <![CDATA[ rn >=#{being,jdbcType=INTEGER} ]]>)
+        order by ID desc
+    </select>
+
+    <insert id="insertPolicyElucidation"
+            parameterType="com.anssy.venturebar.service.entity.PolicyElucidationEntity">
+        insert into SERVICE_POLICYELUCIDATION
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                ID,
+            </if>
+            <if test="image != null">
+                IMAGE,
+            </if>
+            <if test="title != null">
+                TITLE,
+            </if>
+            <if test="publishId != null">
+                PUBLISH_ID,
+            </if>
+            <if test="publishTime != null">
+                PUBLISH_TIME,
+            </if>
+            <if test="details != null">
+                DETAILS,
+            </if>
+            <if test="source != null">
+                SOURCE,
+            </if>
+            <if test="url != null">
+                URL,
+            </if>
+            <if test="pv != null">
+                PV,
+            </if>
+            <if test="praise != null">
+                PRAISE,
+            </if>
+            <if test="weight != null">
+                WEIGHT,
+            </if>
+            <if test="state != null">
+                STATE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                <include refid="sequence_id"/>
+                ,
+            </if>
+            <if test="image != null">
+                #{image,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="publishId != null">
+                #{publishId,jdbcType=BIGINT},
+            </if>
+            <if test="publishTime != null">
+                #{publishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="details != null">
+                #{details,jdbcType=CLOB},
+            </if>
+            <if test="source != null">
+                #{source,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="pv != null">
+                #{pv,jdbcType=BIGINT},
+            </if>
+            <if test="praise != null">
+                #{praise,jdbcType=BIGINT},
+            </if>
+            <if test="weight != null">
+                #{weight,jdbcType=BIGINT},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updatePolicyElucidation"
+            parameterType="com.anssy.venturebar.service.entity.PolicyElucidationEntity">
+        update SERVICE_POLICYELUCIDATION
+        set
+        IMAGE=#{image,jdbcType=VARCHAR},
+        TITLE=#{title,jdbcType=VARCHAR},
+        PUBLISH_ID=#{publishId,jdbcType=BIGINT},
+        PUBLISH_TIME=#{publishTime,jdbcType=TIMESTAMP},
+        DETAILS=#{details,jdbcType=CLOB},
+        SOURCE=#{source,jdbcType=VARCHAR},
+        URL=#{url,jdbcType=VARCHAR},
+        PV=#{pv,jdbcType=BIGINT},
+        PRAISE= #{praise,jdbcType=BIGINT},
+        WEIGHT=#{weight,jdbcType=BIGINT},
+        STATE=#{state,jdbcType=INTEGER}
+        where ID=#{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

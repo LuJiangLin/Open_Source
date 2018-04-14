@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anssy.venturebar.collect.dao.CollectInfoDao">
+    <resultMap id="BaseResultMap"
+               type="com.anssy.venturebar.collect.entity.CollectInfoEntity">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="TYPE" property="type" jdbcType="INTEGER"/>
+        <result column="FID" property="fid" jdbcType="BIGINT"/>
+        <result column="COLLECT_ID" property="collectId" jdbcType="BIGINT"/>
+        <result column="COLLECT_TIME" property="collectTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, TYPE, FID, COLLECT_ID, COLLECT_TIME
+    </sql>
+    <sql id="sequence_id">
+        sequence_collect_collectInfo.nextVal
+    </sql>
+
+    <select id="findCollectByType" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from COLLECT_COLLECTINFO
+        where TYPE = #{0}
+        and FID=#{1} and COLLECT_ID=#{2}
+    </select>
+
+    <select id="findCollect" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from COLLECT_COLLECTINFO
+        where TYPE = #{0}
+        and COLLECT_ID=#{1}
+    </select>
+
+    <delete id="deleteCollectInfo" parameterType="java.lang.Long">
+        delete from
+        COLLECT_COLLECTINFO
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <insert id="insertCollectInfo" parameterType="com.anssy.venturebar.collect.entity.CollectInfoEntity">
+        insert into COLLECT_COLLECTINFO
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                ID,
+            </if>
+            <if test="type != null">
+                TYPE,
+            </if>
+            <if test="fid != null">
+                FID,
+            </if>
+            <if test="collectId != null">
+                COLLECT_ID,
+            </if>
+            <if test="collectTime != null">
+                COLLECT_TIME,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                <include refid="sequence_id"/>
+                ,
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="fid != null">
+                #{fid,jdbcType=BIGINT},
+            </if>
+            <if test="collectId != null">
+                #{collectId,jdbcType=BIGINT},
+            </if>
+            <if test="collectTime != null">
+                #{collectTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+</mapper>

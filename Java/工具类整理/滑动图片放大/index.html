@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>图片缩放 在线演示 ThinkCSS</title>
+<script type="text/javascript" src="wheel.js"></script>
+<script type="text/javascript">
+window.onload=function (){
+	var oImg=document.getElementsByTagName("img")[0];
+
+	fnWheel(oImg,function (down,oEvent){
+
+		var oldWidth=this.offsetWidth;
+		var oldHeight=this.offsetHeight;
+		var oldLeft=this.offsetLeft;
+		var oldTop=this.offsetTop;
+
+		var scaleX=(oEvent.clientX-oldLeft)/oldWidth;//比例
+		var scaleY=(oEvent.clientY-oldTop)/oldHeight;
+
+		if (down){
+			this.style.width=this.offsetWidth*0.9+"px";
+			this.style.height=this.offsetHeight*0.9+"px";
+		}
+		else{
+			this.style.width=this.offsetWidth*1.1+"px";
+			this.style.height=this.offsetHeight*1.1+"px";
+		}
+
+		var newWidth=this.offsetWidth;
+		var newHeight=this.offsetHeight;
+
+		this.style.left=oldLeft-scaleX*(newWidth-oldWidth)+"px";
+		this.style.top=oldTop-scaleY*(newHeight-oldHeight)+"px";
+	});
+}	
+</script>
+</head>
+<body>
+
+
+
+<img src="img/1.jpg" alt="缩放实例图片" style="width:1600px;height:180px;">
+werwerwqersdfsdfsdfasfdssssssssssssssssssssssssssssss
+
+</body>
+</html>

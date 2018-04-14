@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anssy.venturebar.invest.dao.ProjectItemDao">
+    <resultMap id="BaseResultMap" type="com.anssy.venturebar.invest.entity.ProjectItemEntity">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="PROJECT_ID" property="projectId" jdbcType="BIGINT"/>
+        <result column="DESCRIBE" property="describe" jdbcType="VARCHAR"/>
+        <result column="ADVANTAGE" property="advantage" jdbcType="VARCHAR"/>
+        <result column="IS_FINANCING" property="isFinancing" jdbcType="INTEGER"/>
+        <result column="FINANCING_STATE" property="financingState"
+                jdbcType="INTEGER"/>
+        <result column="FINANCING_SUM" property="financingSum"
+                jdbcType="VARCHAR"/>
+        <result column="SELL_SHARE" property="sellShare" jdbcType="INTEGER"/>
+        <result column="FOUNDER" property="founder" jdbcType="VARCHAR"/>
+        <result column="COMPANY_NAME" property="companyName" jdbcType="VARCHAR"/>
+        <result column="COMPANY_SITE" property="companySite" jdbcType="VARCHAR"/>
+        <result column="EMAIL" property="email" jdbcType="VARCHAR"/>
+        <result column="URL" property="url" jdbcType="VARCHAR"/>
+        <result column="APP_URL" property="appUrl" jdbcType="VARCHAR"/>
+        <result column="LINKMAN" property="linkman" jdbcType="VARCHAR"/>
+        <result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+        <result column="PUBLISH_ID" property="publishId" jdbcType="BIGINT"/>
+        <result column="PUBLISH_TIME" property="publishTime" jdbcType="TIMESTAMP"/>
+        <result column="LEAVE_NUMBER" property="leaveNumber" jdbcType="BIGINT"/>
+        <result column="COLLECT_NUMBER" property="collectNumber"
+                jdbcType="BIGINT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, PROJECT_ID, DESCRIBE, ADVANTAGE, IS_FINANCING,
+        FINANCING_STATE,FINANCING_SUM,SELL_SHARE, FOUNDER, COMPANY_NAME,
+        COMPANY_SITE, EMAIL, URL,APP_URL, LINKMAN, PHONE,PUBLISH_ID,PUBLISH_TIME,
+        LEAVE_NUMBER, COLLECT_NUMBER
+    </sql>
+
+    <sql id="sequence_id">
+        sequence_invest_projectItem.nextVal
+    </sql>
+
+    <select id="findProjectItem" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from INVEST_PROJECTITEM
+        where PROJECT_ID = #{projectId,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteProjectItem" parameterType="java.lang.Long">
+        delete from
+        INVEST_PROJECTITEM where PROJECT_ID=
+        #{projectId,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteAllProjectItem">
+        delete from INVEST_PROJECTITEM
+    </delete>
+
+    <update id="updateLeaveNumber" parameterType="java.lang.Long">
+        update
+        INVEST_PROJECTITEM set LEAVE_NUMBER=LEAVE_NUMBER+1
+        where PROJECT_ID=
+        #{projectId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateCollectNumber">
+        update INVEST_PROJECTITEM set
+        COLLECT_NUMBER=COLLECT_NUMBER+#{1}
+        where PROJECT_ID= #{0}
+    </update>
+
+    <insert id="insertProjectItem" parameterType="com.anssy.venturebar.invest.entity.ProjectItemEntity">
+        insert into INVEST_PROJECTITEM
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                ID,
+            </if>
+            <if test="projectId != null">
+                PROJECT_ID,
+            </if>
+            <if test="describe != null">
+                DESCRIBE,
+            </if>
+            <if test="advantage != null">
+                ADVANTAGE,
+            </if>
+            <if test="isFinancing != null">
+                IS_FINANCING,
+            </if>
+            <if test="financingState != null">
+                FINANCING_STATE,
+            </if>
+            <if test="financingSum != null">
+                FINANCING_SUM,
+            </if>
+            <if test="sellShare != null">
+                SELL_SHARE,
+            </if>
+            <if test="founder != null">
+                FOUNDER,
+            </if>
+            <if test="companyName != null">
+                COMPANY_NAME,
+            </if>
+            <if test="companySite != null">
+                COMPANY_SITE,
+            </if>
+            <if test="email != null">
+                EMAIL,
+            </if>
+            <if test="url != null">
+                URL,
+            </if>
+            <if test="appUrl !=null">
+                APP_URL,
+            </if>
+            <if test="linkman != null">
+                LINKMAN,
+            </if>
+            <if test="phone != null">
+                PHONE,
+            </if>
+            <if test="publishId != null">
+                PUBLISH_ID,
+            </if>
+            <if test="publishTime != null">
+                PUBLISH_TIME,
+            </if>
+            <if test="leaveNumber != null">
+                LEAVE_NUMBER,
+            </if>
+            <if test="collectNumber != null">
+                COLLECT_NUMBER,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                <include refid="sequence_id"/>,
+            </if>
+            <if test="projectId != null">
+                #{projectId,jdbcType=BIGINT},
+            </if>
+            <if test="describe != null">
+                #{describe,jdbcType=VARCHAR},
+            </if>
+            <if test="advantage != null">
+                #{advantage,jdbcType=VARCHAR},
+            </if>
+            <if test="isFinancing != null">
+                #{isFinancing,jdbcType=INTEGER},
+            </if>
+            <if test="financingState != null">
+                #{financingState,jdbcType=INTEGER},
+            </if>
+            <if test="financingSum != null">
+                #{financingSum,jdbcType=VARCHAR},
+            </if>
+            <if test="sellShare != null">
+                #{sellShare,jdbcType=INTEGER},
+            </if>
+            <if test="founder != null">
+                #{founder,jdbcType=VARCHAR},
+            </if>
+            <if test="companyName != null">
+                #{companyName,jdbcType=VARCHAR},
+            </if>
+            <if test="companySite != null">
+                #{companySite,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="appUrl !=null">
+                #{appUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="linkman != null">
+                #{linkman,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="publishId != null">
+                #{publishId,jdbcType=BIGINT},
+            </if>
+            <if test="publishTime != null">
+                #{publishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="leaveNumber != null">
+                #{leaveNumber,jdbcType=BIGINT},
+            </if>
+            <if test="collectNumber != null">
+                #{collectNumber,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateProjectItem" parameterType="com.anssy.venturebar.invest.entity.ProjectItemEntity">
+        update INVEST_PROJECTITEM
+        set
+        PROJECT_ID=#{projectId,jdbcType=BIGINT},
+        DESCRIBE=#{describe,jdbcType=VARCHAR},
+        ADVANTAGE=#{advantage,jdbcType=VARCHAR},
+        IS_FINANCING=#{isFinancing,jdbcType=INTEGER},
+        FINANCING_STATE=#{financingState,jdbcType=INTEGER},
+        FINANCING_SUM=#{financingSum,jdbcType=VARCHAR},
+        SELL_SHARE=#{sellShare,jdbcType=INTEGER},
+        FOUNDER=#{founder,jdbcType=VARCHAR},
+        COMPANY_NAME=#{companyName,jdbcType=VARCHAR},
+        COMPANY_SITE=#{companySite,jdbcType=VARCHAR},
+        EMAIL=#{email,jdbcType=VARCHAR},
+        URL=#{url,jdbcType=VARCHAR},
+        APP_URL=#{appUrl,jdbcType=VARCHAR},
+        LINKMAN=#{linkman,jdbcType=VARCHAR},
+        PHONE=#{phone,jdbcType=VARCHAR},
+        PUBLISH_ID=#{publishId,jdbcType=BIGINT},
+        PUBLISH_TIME=#{publishTime,jdbcType=TIMESTAMP},
+        LEAVE_NUMBER=#{leaveNumber,jdbcType=BIGINT},
+        COLLECT_NUMBER=#{collectNumber,jdbcType=BIGINT}
+        where ID=#{id,jdbcType=BIGINT}
+    </update>
+</mapper>

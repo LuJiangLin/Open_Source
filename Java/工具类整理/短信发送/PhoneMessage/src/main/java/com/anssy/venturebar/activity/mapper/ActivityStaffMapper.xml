@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anssy.venturebar.activity.dao.ActivityStaffDao">
+    <resultMap id="BaseResultMap"
+               type="com.anssy.venturebar.activity.entity.ActivityStaffEntity">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="ACTIVITY_ID" property="activityId" jdbcType="BIGINT"/>
+        <result column="JOIN_TYPE" property="joinType" jdbcType="INTEGER"/>
+        <result column="JION_ID" property="jionId" jdbcType="BIGINT"/>
+        <result column="JION_TIME" property="jionTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, ACTIVITY_ID, JOIN_TYPE, JION_ID, JION_TIME
+    </sql>
+
+    <sql id="sequence_id">
+        sequence_activity_Staff.nextVal
+    </sql>
+
+    <select id="findStaff" resultMap="BaseResultMap"
+            parameterType="com.anssy.venturebar.activity.entity.ActivityStaffEntity">
+        select
+        <include refid="Base_Column_List"/>
+        from ACTIVITY_ACTIVITYSTAFF
+        where JOIN_TYPE=#{joinType,jdbcType=INTEGER}
+        and ACTIVITY_ID =#{activityId,jdbcType=BIGINT}
+        and JION_ID=#{jionId,jdbcType=BIGINT}
+    </select>
+
+    <select id="findJoinStaffs" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from ACTIVITY_ACTIVITYSTAFF
+        where JOIN_TYPE=0 and ACTIVITY_ID =
+        #{activityId,jdbcType=BIGINT}
+    </select>
+
+    <select id="findCareStaffs" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from ACTIVITY_ACTIVITYSTAFF
+        where JOIN_TYPE=1 and ACTIVITY_ID =
+        #{activityId,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteCareStaffs" parameterType="java.lang.Long">
+        delete from ACTIVITY_ACTIVITYSTAFF
+        where ACTIVITY_ID = #{activityId,jdbcType=BIGINT}
+    </delete>
+
+    <insert id="insertActivityStaff" parameterType="com.anssy.venturebar.activity.entity.ActivityStaffEntity">
+        insert into ACTIVITY_ACTIVITYSTAFF
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                ID,
+            </if>
+            <if test="activityId != null">
+                ACTIVITY_ID,
+            </if>
+            <if test="joinType != null">
+                JOIN_TYPE,
+            </if>
+            <if test="jionId != null">
+                JION_ID,
+            </if>
+            <if test="jionTime != null">
+                JION_TIME,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                <include refid="sequence_id"/>,
+            </if>
+            <if test="activityId != null">
+                #{activityId,jdbcType=BIGINT},
+            </if>
+            <if test="joinType != null">
+                #{joinType,jdbcType=INTEGER},
+            </if>
+            <if test="jionId != null">
+                #{jionId,jdbcType=BIGINT},
+            </if>
+            <if test="jionTime != null">
+                #{jionTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+</mapper>

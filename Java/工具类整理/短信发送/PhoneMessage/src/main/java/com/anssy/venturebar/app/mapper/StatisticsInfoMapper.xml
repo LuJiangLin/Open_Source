@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anssy.venturebar.app.dao.StatisticsInfoDao">
+    <resultMap id="BaseResultMap" type="com.anssy.venturebar.app.entity.StatisticsInfoEntity">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="APP_DATE" property="appDate" jdbcType="VARCHAR"/>
+        <result column="LOGIN_NUMBER" property="loginNumber" jdbcType="BIGINT"/>
+        <result column="REGISTER_NUMBER" property="registerNumber"
+                jdbcType="BIGINT"/>
+        <result column="ACTIVATE_NUMBER" property="activateNumber"
+                jdbcType="BIGINT"/>
+        <result column="PV" property="pv" jdbcType="BIGINT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, APP_DATE, LOGIN_NUMBER, REGISTER_NUMBER,
+        ACTIVATE_NUMBER, PV
+    </sql>
+
+    <sql id="sequence_id">
+        sequence_app_statisticsInfo.nextVal
+    </sql>
+
+    <select id="findStatistics" resultMap="BaseResultMap"
+            parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from APP_STATISTICSINFO
+        where APP_DATE = #{appDate,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insertStatistics" parameterType="com.anssy.venturebar.app.entity.StatisticsInfoEntity">
+        insert into APP_STATISTICSINFO
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                ID,
+            </if>
+            <if test="appDate != null">
+                APP_DATE,
+            </if>
+            <if test="loginNumber != null">
+                LOGIN_NUMBER,
+            </if>
+            <if test="registerNumber != null">
+                REGISTER_NUMBER,
+            </if>
+            <if test="activateNumber != null">
+                ACTIVATE_NUMBER,
+            </if>
+            <if test="pv != null">
+                PV,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                <include refid="sequence_id"/>,
+            </if>
+            <if test="appDate != null">
+                #{appDate,jdbcType=VARCHAR},
+            </if>
+            <if test="loginNumber != null">
+                #{loginNumber,jdbcType=BIGINT},
+            </if>
+            <if test="registerNumber != null">
+                #{registerNumber,jdbcType=BIGINT},
+            </if>
+            <if test="activateNumber != null">
+                #{activateNumber,jdbcType=BIGINT},
+            </if>
+            <if test="pv != null">
+                #{pv,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

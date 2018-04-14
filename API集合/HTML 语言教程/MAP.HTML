@@ -1,0 +1,111 @@
+<HTML>
+<HEAD>
+   <TITLE>清华大学图书馆主页 - INTERNET 教室 - HTML 语言教程</TITLE>
+</HEAD>
+<BODY BGCOLOR="#D4D4D4">
+
+<H1 ALIGN=CENTER>客户端图象映射图<BR>
+(Client Side Image Map)</H1>
+
+<CENTER><P>
+<HR></P></CENTER>
+
+<P><!--################## Client Side Image Map  ########################--><A NAME="map"></A></P>
+
+<H2><IMG SRC="br20t.gif" ALT="+" HEIGHT=20 WIDTH=20 ALIGN=TOP>客户端图象映射图(Client Side Image Map)</H2>
+<B>请在下图中用鼠标到处点一点，就会理解“客户端图象映射图”的意思了。</B>
+
+<P><!------Basic-------></P>
+
+<H3>&lt;img src=img.gif usemap=&quot;MAP-Name&quot;&gt;<BR>
+<BR>
+&lt;map name=&quot;MAP-Name&quot;&gt;<BR>
+&lt;area shape=&quot;#&quot; coords=&quot;#&quot; href=&quot;url&quot;&gt;<BR>
+&lt;/map&gt;</H3>
+
+<P> </P>
+
+<DL>
+<DD># </DD>
+
+<DL>
+<DT>shape=&quot;rect&quot; coords=&quot;A,A',B,B'&quot; </DT>
+
+<DD>(A,A')=Upper Left, (B,B')=Lower Right </DD>
+
+<DT>shape=&quot;circle&quot; coords=&quot;A,A',R'&quot; </DT>
+
+<DD>(A,A')=Center, R=Radius </DD>
+
+<DT>shape=&quot;poly&quot; coords=&quot;A,A',B,B',C,C'...&quot; </DT>
+
+<DD>(A,A'&gt;=First Corner, (B,B')=Second Corner, ... </DD>
+</DL>
+</DL>
+
+<PRE>
+</PRE>
+
+<P><IMG USEMAP="#Face" SRC="mapimg.gif" HEIGHT=200 WIDTH=300> <MAP name="Face"><!Text BOTTON><AREA shape="rect"
+         href="samp/m-rect.html" 
+         coords="140,20,280,60"><!Triangle BOTTON><AREA shape="poly"
+         href="samp/m-poly.html"
+         coords="100,100,180,80,200,140"><!FACE><AREA shape="circle" 
+         href="samp/m-circle.html" 
+         coords="80,100,60"></MAP></P>
+
+<DL>
+<PRE>&lt;img src=&quot;mapimg.gif&quot; usemap=&quot;#Face&quot;&gt;
+
+&lt;map name=&quot;Face&quot;&gt;
+
+&lt;!Text BOTTON&gt;
+   &lt;area shape=&quot;rect&quot;
+         href=&quot;page.html&quot; 
+         coords=&quot;140,20,280,60&quot;&gt;
+
+&lt;!Triangle BOTTON&gt;
+   &lt;area shape=&quot;poly&quot;
+         href=&quot;image.html&quot;
+         coords=&quot;100,100,180,80,200,140&quot;&gt;
+
+&lt;!FACE&gt;
+   &lt;area shape=&quot;circle&quot; 
+         href=&quot;new.html&quot; 
+         coords=&quot;80,100,60&quot;&gt;
+&lt;/map&gt;
+
+</PRE>
+</DL>
+
+<P><A HREF="image.html#cmap">返回教程中“图象”一节</A> </P>
+
+<P><!--################## (^^) Jump & Add (^^) ########################-->
+<HR><A HREF="http://ncdesign.kyushu-id.ac.jp/"><IMG SRC="angel-homeg.gif" ALT="NCD HOME" HSPACE=3 VSPACE=10 BORDER=0 HEIGHT=46 WIDTH=55 ALIGN=LEFT></A>
+<B><A HREF="../html_design.html">HTML
+Design Guide Main Page<BR>
+<NOBR></A></B><FONT FACE="'Times New Roman', Arial"><FONT SIZE=-1><A HREF="html_design.html#content">Contents</A>
+|| <A HREF="page.html">Page</A>
+|| <A HREF="font.html">Font</A>
+|| <A HREF="text_style.html">Text
+Style</A> || <A HREF="image.html">Image</A>
+|| <A HREF="form.html">Form</A>
+|| <A HREF="table.html">Table</A>
+|| <A HREF="table02.html">Table
+Advanced</A> <BR>
+|| <A HREF="frame.html">Frames</A>
+|| <A HREF="marquee.html">Marquee</A>
+|| <A HREF="inline.html">Alternative
+Inline Elements</A> <BR>
+</FONT><FONT SIZE=-2><A HREF="tag-index.html">Tag
+Index</A> || <A HREF="new.html">What's
+New</A></FONT><FONT SIZE=-1> </FONT></FONT><BR clear=all>
+</P>
+
+<P>Network Communication Design<BR>
+<A HREF="http://ncdesign.kyushu-id.ac.jp/">http://ncdesign.kyushu-id.ac.jp/<BR>
+</A>C&amp;P 1994-1996 Yuriko Ienaga <FONT SIZE=-1><A HREF="mailto:v91102@vgenda.kyushu-id.ac.jp">v91102@vgenda.kyushu-id.ac.jp</A></FONT>
+<!--################## (^^) END (^^) ########################--></P>
+
+</BODY>
+</HTML>

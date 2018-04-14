@@ -1,0 +1,45 @@
+linux-centos:
+ip:65.49.133.112
+
+You will need a new root password to access your VPS: ylb8WJoGJe5L
+
+New SSH Port: 29419
+
+
+命令：后台启动命令：sh  run.sh
+	常规启动：./run.sh
+	关闭：  ./shutdown.sh - s
+
+
+mysql-账户：root   密码：test
+
+mysql命令：
+mysql> use mysql;
+mysql> update mysql.user set authentication_string=password('root') where user='root' ;
+mysql> flush privileges;
+mysql> quit;
+
+启动mysql
+systemctl start mariadb.service 或者 systemctl start mysqld.service
+
+结束
+systemctl stop mariadb.service 或者 systemctl stop mysqld.service
+
+重启
+systemctl restart mariadb.service 或者 systemctl restart mysqld.service
+
+开机自启
+systemctl enable mariadb.service 或者 systemctl enable mysqld.service
+
+远程数据库连接失败需要修改用户信息：update user set host = '%' where user = 'root';
+
+
+
+商户后台（admin）：
+ocean
+jiang2038961b
+
+
+merchant：
+admin
+123456

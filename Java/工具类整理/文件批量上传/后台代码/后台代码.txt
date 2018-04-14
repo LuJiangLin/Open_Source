@@ -1,0 +1,47 @@
+ //  图片批量上传操作
+    @Permission(SYS_PICTURE_CREATE)
+    @ResponseBody
+//    @RequestMapping("/upPic")
+    @RequestMapping(value = "/upPic", method = RequestMethod.POST)
+    public void upPic(@RequestParam("file") MultipartFile file1, HttpServletRequest request, HttpServletResponse response) throws IllegalStateException, IOException {
+//        获取上传的图片所属的ID
+        Long pid = Long.parseLong(request.getSession().getAttribute("pid").toString());
+        //创建一个通用的多部分解析器
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+        //判断 request 是否有文件上传,即多部分请求
+        String path = request.getSession().getServletContext().getRealPath("/") + "/upload/pic/";   //上传文件的文件夹
+        String path1 = this.getBasePath() + "/upload/pic/";   //上传文件的文件夹
+        File localFile1 = new File(path);
+        if (!localFile1.exists()) {
+            localFile1.mkdir();
+        }
+        if (multipartResolver.isMultipart(request)) {
+            //转换成多部分request
+            MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+            //取得request中的所有文件名
+            Iterator<String> iter = multiRequest.getFileNames();
+            Long i = 0L;
+            while (iter.hasNext()) {
+                //取得上传文件
+                Path picture = new Path();
+                MultipartFile file = multiRequest.getFile(iter.next());
+                if (file != null) {
+                    //取得当前上传文件的文件名称
+                    String myFileName = file.getOriginalFilename();
+                    //如果名称不为“”,说明该文件存在，否则说明该文件不存在
+                    if (myFileName.trim() != "") {
+                        System.out.println(myFileName);
+                        //重命名上传后的文件名
+                        String fileName = String.valueOf(System.currentTimeMillis()) + file.getOriginalFilename();
+                        //定义上传路径
+                        File localFile = new File(path + fileName);
+                        file.transferTo(localFile);
+                        picture.setPid(pid);
+                        picture.setPath("/upload/pic/" + fileName);
+                        pathService.insert(picture);
+                    }
+                }
+            }
+        }
+    }
+

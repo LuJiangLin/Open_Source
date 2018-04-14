@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anssy.venturebar.picture.dao.PictureInfoDao">
+    <resultMap id="BaseResultMap"
+               type="com.anssy.venturebar.picture.entity.PictureInfoEntity">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="PICTURE_ID" property="pictureId" jdbcType="VARCHAR"/>
+        <result column="PICTURE_MARK" property="pictureMark" jdbcType="VARCHAR"/>
+        <result column="PICTURE_TYPE" property="pictureType" jdbcType="INTEGER"/>
+        <result column="PICTURE_PATH" property="picturePath" jdbcType="VARCHAR"/>
+        <result column="UPLOAD_TIME" property="uploadTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="sequence_id">
+        sequence_picture_pictureInfo.nextVal
+    </sql>
+
+    <sql id="Base_Column_List">
+        ID, PICTURE_ID,PICTURE_MARK, PICTURE_TYPE, PICTURE_PATH, UPLOAD_TIME
+    </sql>
+
+    <select id="findTinyPicture" resultMap="BaseResultMap"
+            parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from PICTURE_PICTUREINFO
+        where PICTURE_TYPE=0
+        and PICTURE_ID = #{pictureId,jdbcType=VARCHAR}
+        and rownum =1
+        order by ID desc
+    </select>
+
+    <select id="findbigPicture" resultMap="BaseResultMap"
+            parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from PICTURE_PICTUREINFO
+        where <![CDATA[ PICTURE_TYPE>0  ]]>
+        and PICTURE_ID = #{pictureId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="findPictureAll" resultMap="BaseResultMap"
+            parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from PICTURE_PICTUREINFO
+        where PICTURE_ID = #{pictureId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="findPictureByMark" resultMap="BaseResultMap"
+            parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from PICTURE_PICTUREINFO
+        where PICTURE_MARK = #{pictureMark,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deletePicture" parameterType="java.lang.String">
+        delete from PICTURE_PICTUREINFO where PICTURE_ID = #{pictureId,jdbcType=VARCHAR}
+    </delete>
+
+    <delete id="deletePictureByMark" parameterType="java.lang.String">
+        delete from PICTURE_PICTUREINFO where PICTURE_MARK = #{pictureMark,jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="insertPicture" parameterType="com.anssy.venturebar.picture.entity.PictureInfoEntity">
+        insert into PICTURE_PICTUREINFO
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                ID,
+            </if>
+            <if test="pictureId != null">
+                PICTURE_ID,
+            </if>
+            <if test="pictureMark != null">
+                PICTURE_MARK,
+            </if>
+            <if test="pictureType != null">
+                PICTURE_TYPE,
+            </if>
+            <if test="picturePath != null">
+                PICTURE_PATH,
+            </if>
+            <if test="uploadTime != null">
+                UPLOAD_TIME,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                <include refid="sequence_id"/>
+                ,
+            </if>
+            <if test="pictureId != null">
+                #{pictureId,jdbcType=VARCHAR},
+            </if>
+            <if test="pictureMark != null">
+                #{pictureMark,jdbcType=VARCHAR},
+            </if>
+            <if test="pictureType != null">
+                #{pictureType,jdbcType=INTEGER},
+            </if>
+            <if test="picturePath != null">
+                #{picturePath,jdbcType=VARCHAR},
+            </if>
+            <if test="uploadTime != null">
+                #{uploadTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+</mapper>

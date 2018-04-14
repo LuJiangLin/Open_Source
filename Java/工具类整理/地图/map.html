@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <style type="text/css">
+      body,html,#container{
+        height: 100%;
+        margin: 0px;
+        font:12px Arial;
+      }
+      .taiwan{
+      	border: solid 1px red;
+      	color: red;
+      	float: left;
+      	width: 50px;
+      	background-color: rgba(255,0,0,0.1)
+      }
+    </style>
+    <title>地图样式</title>
+  </head>
+  <body>
+   <div id="container" tabindex="0"></div>
+   <!--<script src="address.js"></script>
+   <!--版本号 -自己的key-->
+   <script src="https://webapi.amap.com/maps?v=1.4.0&key=c202e99d2d29cd2f326d2dd77ea1e31e"></script>
+   <script type="text/javascript">
+        var map = new AMap.Map('container',{resizeEnable: true,zoom:4});
+
+        var markers = [];
+		var provinces = [
+		{
+			"name": "尖沙咀站",
+			"center": "116.405285,39.904989"
+		}, {
+			"name": "黑牛城道站",
+			"center": "117.190182,39.125596"
+		}, {
+			"name": "九龙站",
+			"center": "114.502461,38.045474"
+		}, {
+			"name": "小安站",
+			"center": "112.549248,37.857014"
+		}, {
+			"name": "物理站",
+			"center": "111.670801,40.818311"
+		}, {
+			"name": "A站",
+			"center": "123.429096,41.796767"
+		}, {
+			"name": "B站",
+			"center": "125.3245,43.886841"
+		}, {
+			"name": "C站",
+			"center": "126.642464,45.756967"
+		}, {
+			"name": "D站",
+			"center": "121.472644,31.231706"
+		}, {
+			"name": "E站",
+			"center": "118.767413,32.041544"
+		}, {
+			"name": "F站",
+			"center": "120.153576,30.287459"
+		}, {
+			"name": "G站",
+			"center": "117.283042,31.86119"
+		}, {
+			"name": "H站",
+			"center": "119.306239,26.075302"
+		}, {
+			"name": "I站",
+			"center": "115.892151,28.676493"
+		}, {
+			"name": "J站",
+			"center": "117.000923,36.675807"
+		}, {
+			"name": "K站",
+			"center": "113.665412,34.757975"
+		}, {
+			"name": "L站",
+			"center": "114.298572,30.584355"
+		}, {
+			"name": "M站",
+			"center": "112.982279,28.19409"
+		}, {
+			"name": "N站",
+			"center": "113.280637,23.125178"
+		}, {
+			"name": "O站",
+			"center": "108.320004,22.82402"
+		}, {
+			"name": "P站",
+			"center": "110.33119,20.031971"
+		}, {
+			"name": "Q站",
+			"center": "106.504962,29.533155"
+		}, {
+			"name": "R站",
+			"center": "104.065735,30.659462"
+		}, {
+			"name": "S站",
+			"center": "106.713478,26.578343"
+		}, {
+			"name": "T站",
+			"center": "102.712251,25.040609"
+		}, {
+			"name": "U站",
+			"center": "91.132212,29.660361"
+		}, {
+			"name": "陕西站",
+			"center": "108.948024,34.263161"
+		}, {
+			"name": "V站",
+			"center": "103.823557,36.058039"
+		}, {
+			"name": "W站",
+			"center": "101.778916,36.623178"
+		}, {
+			"name": "X站",
+			"center": "106.278179,38.46637"
+		}, {
+			"name": "Y站",
+			"center": "87.617733,43.792818"
+		}, {
+			"name": "Z站",
+			"center": "121.509062,25.044332"
+		}, {
+			"name": "QQ站",
+			"center": "114.173355,22.320048"
+		}, {
+			"name": "AA站",
+			"center": "113.54909,22.198951"
+		}
+		];
+
+        var infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
+        function markerClick(e) {
+            infoWindow.setContent(e.target.content);
+            infoWindow.open(map, e.target.getPosition());
+        }
+
+
+        for (var i = 0; i < provinces.length; i += 1) {
+    			var marker;
+				var str = provinces[i].name;
+				var length = str.length*12;
+					var content= "<div style='color:#FFF;background-color:#0099FF;width:"+length+"px;height:15px;border-radius:5px;'>"+provinces[i].name+"</div>";
+    				marker = new AMap.Marker({
+    					position: provinces[i].center.split(','),
+    					title: provinces[i].name,
+						draggable:false,//设置点标记是否可拖拽移动，默认为false
+						visible:true,//点标记是否可见，默认为true
+						animation:"AMAP_ANIMATION_DROP",//点标掉落效果
+						bubble:true,
+						content: content,
+    					map: map
+    				});
+            marker.content = '<p>123123123</p>';
+            marker.on('click', markerClick);
+            marker.emit('click', {target: marker});
+    			}
+    			markers.push(marker);
+			  map.setFitView();
+
+
+   </script>
+    <script type="text/javascript" src="Toolbar.js"></script>
+    <div style="width:100px;height:30px;border-radius:5px;"></div>
+  </body>
+</html>

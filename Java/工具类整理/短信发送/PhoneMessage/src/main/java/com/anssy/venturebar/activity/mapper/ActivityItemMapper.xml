@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anssy.venturebar.activity.dao.ActivityItemDao">
+    <resultMap id="BaseResultMap"
+               type="com.anssy.venturebar.activity.entity.ActivityItemEntity">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="ACTIVITY_ID" property="activityId" jdbcType="BIGINT"/>
+        <result column="DESCRIBE" property="describe" jdbcType="VARCHAR"/>
+        <result column="ACTIVITY_SITE" property="activitySite"
+                jdbcType="VARCHAR"/>
+        <result column="UPPER_NUMBER" property="upperNumber" jdbcType="VARCHAR"/>
+        <result column="LINKMAN" property="linkman" jdbcType="VARCHAR"/>
+        <result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+        <result column="JOIN_NUMBER" property="joinNumber" jdbcType="INTEGER"/>
+        <result column="CARE_NUMBER" property="careNumber" jdbcType="INTEGER"/>
+        <result column="ACTIVITY_STATE" property="activityState"
+                jdbcType="INTEGER"/>
+        <result column="PUBLISH_ID" property="publishId" jdbcType="BIGINT"/>
+        <result column="PUBLISH_TIME" property="publishTime" jdbcType="TIMESTAMP"/>
+        <result column="LEAVE_NUMBER" property="leaveNumber" jdbcType="BIGINT"/>
+        <result column="COLLECT_NUMBER" property="collectNumber" jdbcType="BIGINT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, ACTIVITY_ID, DESCRIBE, ACTIVITY_SITE, UPPER_NUMBER,
+        LINKMAN, PHONE,JOIN_NUMBER,CARE_NUMBER, ACTIVITY_STATE,
+        PUBLISH_ID,PUBLISH_TIME,LEAVE_NUMBER,COLLECT_NUMBER
+    </sql>
+
+    <sql id="sequence_id">
+        sequence_activity_activityItem.nextVal
+    </sql>
+
+    <select id="findActivityItem" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from ACTIVITY_ACTIVITYITEM
+        where ACTIVITY_ID =
+        #{activityId,jdbcType=DECIMAL}
+    </select>
+
+    <delete id="deleteActivityItem" parameterType="java.lang.Long">
+        delete from ACTIVITY_ACTIVITYITEM
+        where ACTIVITY_ID = #{activityId,jdbcType=DECIMAL}
+    </delete>
+
+    <delete id="deleteAllByNotidComefrom" >
+        DELETE FROM ACTIVITY_ACTIVITYITEM WHERE ACTIVITY_ID
+        NOT IN (SELECT ID FROM ACTIVITY_ACTIVITYINFO)
+    </delete>
+
+    <update id="updateJoinNumber" parameterType="java.lang.Long">
+        update ACTIVITY_ACTIVITYITEM set JOIN_NUMBER=JOIN_NUMBER+1
+        where ACTIVITY_ID = #{activityId,jdbcType=DECIMAL}
+    </update>
+
+    <update id="updateCareNumber" parameterType="java.lang.Long">
+        update ACTIVITY_ACTIVITYITEM set CARE_NUMBER=CARE_NUMBER+1
+        where ACTIVITY_ID = #{activityId,jdbcType=DECIMAL}
+    </update>
+
+    <update id="updateLeaveNumber" parameterType="java.lang.Long">
+        update ACTIVITY_ACTIVITYITEM set LEAVE_NUMBER=LEAVE_NUMBER+1
+        where ACTIVITY_ID = #{activityId,jdbcType=DECIMAL}
+    </update>
+
+    <update id="updateCollectNumber">
+        update ACTIVITY_ACTIVITYITEM set COLLECT_NUMBER=COLLECT_NUMBER+#{1}
+        where ACTIVITY_ID= #{0}
+    </update>
+
+    <insert id="insertActivityItem" parameterType="com.anssy.venturebar.activity.entity.ActivityItemEntity">
+        insert into ACTIVITY_ACTIVITYITEM
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                ID,
+            </if>
+            <if test="activityId != null">
+                ACTIVITY_ID,
+            </if>
+            <if test="describe != null">
+                DESCRIBE,
+            </if>
+            <if test="activitySite != null">
+                ACTIVITY_SITE,
+            </if>
+            <if test="upperNumber != null">
+                UPPER_NUMBER,
+            </if>
+            <if test="linkman != null">
+                LINKMAN,
+            </if>
+            <if test="phone != null">
+                PHONE,
+            </if>
+            <if test="joinNumber != null">
+                JOIN_NUMBER,
+            </if>
+            <if test="careNumber != null">
+                CARE_NUMBER,
+            </if>
+            <if test="activityState != null">
+                ACTIVITY_STATE,
+            </if>
+            <if test="publishId != null">
+                PUBLISH_ID,
+            </if>
+            <if test="publishTime != null">
+                PUBLISH_TIME,
+            </if>
+            <if test="leaveNumber != null">
+                LEAVE_NUMBER,
+            </if>
+            <if test="collectNumber != null">
+                COLLECT_NUMBER,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                <include refid="sequence_id"/>
+                ,
+            </if>
+            <if test="activityId != null">
+                #{activityId,jdbcType=BIGINT},
+            </if>
+            <if test="describe != null">
+                #{describe,jdbcType=VARCHAR},
+            </if>
+            <if test="activitySite != null">
+                #{activitySite,jdbcType=VARCHAR},
+            </if>
+            <if test="upperNumber != null">
+                #{upperNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="linkman != null">
+                #{linkman,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="joinNumber != null">
+                #{joinNumber,jdbcType=INTEGER},
+            </if>
+            <if test="careNumber != null">
+                #{careNumber,jdbcType=INTEGER},
+            </if>
+            <if test="activityState != null">
+                #{activityState,jdbcType=INTEGER},
+            </if>
+            <if test="publishId != null">
+                #{publishId,jdbcType=BIGINT},
+            </if>
+            <if test="publishTime != null">
+                #{publishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="leaveNumber != null">
+                #{leaveNumber,jdbcType=BIGINT},
+            </if>
+            <if test="collectNumber != null">
+                #{collectNumber,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateActivityItem" parameterType="com.anssy.venturebar.activity.entity.ActivityItemEntity">
+        update ACTIVITY_ACTIVITYITEM
+        set
+        ACTIVITY_ID=#{activityId,jdbcType=BIGINT},
+        DESCRIBE=#{describe,jdbcType=VARCHAR},
+        ACTIVITY_SITE=#{activitySite,jdbcType=VARCHAR},
+        UPPER_NUMBER=#{upperNumber,jdbcType=VARCHAR},
+        LINKMAN=#{linkman,jdbcType=VARCHAR},
+        PHONE=#{phone,jdbcType=VARCHAR},
+        JOIN_NUMBER=#{joinNumber,jdbcType=INTEGER},
+        CARE_NUMBER=#{careNumber,jdbcType=INTEGER},
+        ACTIVITY_STATE=#{activityState,jdbcType=INTEGER},
+        PUBLISH_ID=#{publishId,jdbcType=BIGINT},
+        PUBLISH_TIME=#{publishTime,jdbcType=TIMESTAMP},
+        LEAVE_NUMBER=#{leaveNumber,jdbcType=BIGINT},
+        COLLECT_NUMBER=#{collectNumber,jdbcType=BIGINT}
+        where ID=#{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

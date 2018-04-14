@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anssy.venturebar.service.dao.ServiceItemDao">
+    <resultMap id="BaseResultMap"
+               type="com.anssy.venturebar.service.entity.ServiceItemEntity">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="SERVICE_ID" property="serviceId" jdbcType="BIGINT"/>
+        <result column="DESCRIBE" property="describe" jdbcType="VARCHAR"/>
+        <result column="OTHER" property="other" jdbcType="VARCHAR"/>
+        <result column="SERVICE_SITE" property="serviceSite" jdbcType="VARCHAR"/>
+        <result column="SERVICE_TIME" property="serviceTime" jdbcType="VARCHAR"/>
+        <result column="URL" property="url" jdbcType="VARCHAR"/>
+        <result column="LINKMAN" property="linkman" jdbcType="VARCHAR"/>
+        <result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+        <result column="EMAIL" property="email" jdbcType="VARCHAR"/>
+        <result column="PUBLISH_ID" property="publishId" jdbcType="BIGINT"/>
+        <result column="PUBLISH_TIME" property="publishTime" jdbcType="TIMESTAMP"/>
+        <result column="LEAVE_NUMBER" property="leaveNumber" jdbcType="BIGINT"/>
+        <result column="COLLECT_NUMBER" property="collectNumber"
+                jdbcType="BIGINT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, SERVICE_ID, DESCRIBE,OTHER, SERVICE_SITE, SERVICE_TIME, URL,
+        LINKMAN,PHONE,EMAIL,PUBLISH_ID,PUBLISH_TIME,LEAVE_NUMBER,COLLECT_NUMBER
+    </sql>
+    <sql id="sequence_id">
+        sequence_service_serviceItem.nextVal
+    </sql>
+
+    <select id="findServiceItem" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from SERVICE_SERVICEITEM
+        where SERVICE_ID =
+        #{serviceId,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteServiceItem" parameterType="java.lang.Long">
+        delete from
+        SERVICE_SERVICEITEM where SERVICE_ID = #{serviceId,jdbcType=BIGINT}
+    </delete>
+
+    <update id="updateLeaveNumber" parameterType="java.lang.Long">
+        update
+        SERVICE_SERVICEITEM set LEAVE_NUMBER=LEAVE_NUMBER+1
+        where SERVICE_ID =
+        #{serviceId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateCollectNumber">
+        update SERVICE_SERVICEITEM set
+        COLLECT_NUMBER=COLLECT_NUMBER+#{1}
+        where SERVICE_ID= #{0}
+    </update>
+
+    <insert id="insertServiceItem" parameterType="com.anssy.venturebar.service.entity.ServiceItemEntity">
+        insert into SERVICE_SERVICEITEM
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                ID,
+            </if>
+            <if test="serviceId != null">
+                SERVICE_ID,
+            </if>
+            <if test="describe != null">
+                DESCRIBE,
+            </if>
+            <if test="other != null">
+                OTHER,
+            </if>
+            <if test="serviceSite != null">
+                SERVICE_SITE,
+            </if>
+            <if test="serviceTime != null">
+                SERVICE_TIME,
+            </if>
+            <if test="url != null">
+                URL,
+            </if>
+            <if test="linkman != null">
+                LINKMAN,
+            </if>
+            <if test="phone != null">
+                PHONE,
+            </if>
+            <if test="email !=null">
+                EMAIL,
+            </if>
+            <if test="publishId != null">
+                PUBLISH_ID,
+            </if>
+            <if test="publishTime != null">
+                PUBLISH_TIME,
+            </if>
+            <if test="leaveNumber != null">
+                LEAVE_NUMBER,
+            </if>
+            <if test="collectNumber != null">
+                COLLECT_NUMBER,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                <include refid="sequence_id"/>
+                ,
+            </if>
+            <if test="serviceId != null">
+                #{serviceId,jdbcType=BIGINT},
+            </if>
+            <if test="describe != null">
+                #{describe,jdbcType=VARCHAR},
+            </if>
+            <if test="other != null">
+                #{other,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceSite != null">
+                #{serviceSite,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceTime != null">
+                #{serviceTime,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="linkman != null">
+                #{linkman,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="email !=null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="publishId != null">
+                #{publishId,jdbcType=BIGINT},
+            </if>
+            <if test="publishTime != null">
+                #{publishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="leaveNumber != null">
+                #{leaveNumber,jdbcType=BIGINT},
+            </if>
+            <if test="collectNumber != null">
+                #{collectNumber,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateServiceItem"
+            parameterType="com.anssy.venturebar.service.entity.ServiceItemEntity">
+        update SERVICE_SERVICEITEM
+        set
+        SERVICE_ID=#{serviceId,jdbcType=BIGINT},
+        DESCRIBE=#{describe,jdbcType=VARCHAR},
+        OTHER=#{other,jdbcType=VARCHAR},
+        SERVICE_SITE=#{serviceSite,jdbcType=VARCHAR},
+        SERVICE_TIME=#{serviceTime,jdbcType=VARCHAR},
+        URL=#{url,jdbcType=VARCHAR},
+        LINKMAN=#{linkman,jdbcType=VARCHAR},
+        PHONE=#{phone,jdbcType=VARCHAR},
+        EMAIL=#{email,jdbcType=VARCHAR},
+        PUBLISH_ID=#{publishId,jdbcType=BIGINT},
+        PUBLISH_TIME=#{publishTime,jdbcType=TIMESTAMP},
+        LEAVE_NUMBER=#{leaveNumber,jdbcType=BIGINT},
+        COLLECT_NUMBER=#{collectNumber,jdbcType=BIGINT}
+        where ID=#{id,jdbcType=BIGINT}
+    </update>
+</mapper>

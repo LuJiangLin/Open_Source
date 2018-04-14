@@ -1,0 +1,211 @@
+<HTML>
+<HEAD>
+   <TITLE>清华大学图书馆主页 - INTERNET 教室 - HTML 语言教程</TITLE>
+</HEAD>
+<BODY BGCOLOR="#D4D4D4">
+
+<H1 ALIGN=CENTER>图象(IMAGE)标记(TAGS)</H1>
+
+<CENTER><P>
+<HR></P></CENTER>
+
+<P><!--################## Basic ########################--><A NAME="basic"></A></P>
+
+<H2><IMG SRC="br20t.gif" ALT="+" HEIGHT=20 WIDTH=20 ALIGN=TOP> 链入图象的基本语法</H2>
+
+<P><!------img source-------></P>
+
+<H3>&lt;img src=#&gt; #=图象的 URL</H3>
+
+<P><!------img description-------></P>
+
+<H3>&lt;img alt=#&gt; <BR>
+<FONT SIZE=+0>#=在浏览器尚未完全读入图象时，在图象位置显示的文字。</FONT></H3>
+
+<DL>
+<DD><TT>&lt;img src=&quot;f.gif&quot; alt=&quot;MY FACE :-)&quot;&gt; </TT></DD>
+</DL>
+
+<P><IMG SRC="f.gif" ALT="MY FACE :-)" HEIGHT=64 WIDTH=64> </P>
+
+<PRE>
+</PRE>
+
+<P><!--################## Image aligned with Text ########################--><A NAME="text"></A></P>
+
+<H2><IMG SRC="br20t.gif" ALT="+" HEIGHT=20 WIDTH=20 ALIGN=TOP> 图象和文字的对齐</H2>
+
+<H3>&lt;img align=#&gt; #=top, middle, bottom</H3>
+
+<DL>
+<DD><TT>&lt;img src=URL align=top&gt; My face! </TT></DD>
+</DL>
+
+<P><IMG SRC="f.gif" ALT="(^_^)" HEIGHT=64 WIDTH=64 ALIGN=TOP> My Face!
+</P>
+
+<DL>
+<DD><TT>&lt;img src=URL align=middle&gt; My face! </TT></DD>
+</DL>
+
+<P><IMG SRC="f.gif" ALT="(^_^)" HEIGHT=64 WIDTH=64 ALIGN=CENTER> My Face!
+</P>
+
+<DL>
+<DD><TT>&lt;img src=URL align=bottom&gt; My face! </TT></DD>
+</DL>
+
+<P><IMG SRC="f.gif" ALT="(^_^)" HEIGHT=64 WIDTH=64 ALIGN=BOTTOM> My Face!
+</P>
+
+<UL>
+<LI>只有一行文字才可以放在图象的两边。（不知道翻译的对不对？)</LI>
+<LI>Only one text line can be flown into the both side of Image. </LI>
+</UL>
+
+<PRE>
+</PRE>
+
+<P><!--################## Floating Image ########################--><A NAME="float"></A></P>
+
+<H2><IMG SRC="br20t.gif" ALT="+" HEIGHT=20 WIDTH=20 ALIGN=TOP> 图象在页面中的对齐/布局(Floating Image) </H2>
+
+<P><!------img align=left-------></P>
+
+<H3><B>&lt;img align=left&gt;</B></H3>
+
+<DL>
+<DD><TT>&lt;img src=URL align=left&gt;My Face!&lt;br&gt;<BR>
+It is always&lt;br&gt;<BR>
+smiling.&lt;br&gt;<BR>
+Hahaha....&lt;br&gt;</TT><BR>
+</DD>
+</DL>
+
+<P><IMG SRC="f.gif" ALT="(^_^)" HEIGHT=64 WIDTH=64 ALIGN=LEFT>My Face!<BR>
+It is always<BR>
+smiling.<BR>
+Hahaha....<BR>
+<BR clear=all>
+</P>
+
+<PRE>
+</PRE>
+
+<P><!------img align=right-------></P>
+
+<H3><B>&lt;img align=right&gt;</B></H3>
+
+<P><IMG SRC="f.gif" ALT="(^_^)" HEIGHT=64 WIDTH=64 ALIGN=RIGHT>My Face!<BR>
+It is always<BR>
+smiling.<BR>
+Hahaha....<BR>
+<BR clear=all>
+</P>
+
+<PRE>
+</PRE>
+
+<P><!------br clear-------></P>
+
+<H3><B>&lt;br clear=all&gt;</B></H3>
+
+<DL>
+<DD><TT>&lt;img src=URL align=left&gt;My Face!&lt;br&gt;<BR>
+It is always<BR>
+&lt;br clear=all&gt;<BR>
+smiling.&lt;br&gt;<BR>
+Hahaha....&lt;br&gt;</TT><BR>
+</DD>
+</DL>
+
+<P><IMG SRC="f.gif" ALT="(^_^)" HEIGHT=64 WIDTH=64 ALIGN=LEFT>My Face!<BR>
+It is always<BR>
+<BR clear=all>
+smiling.<BR>
+Hahaha....</P>
+
+<P> </P>
+
+<PRE>
+</PRE>
+
+<P><!------vspace hspace-------></P>
+
+<H3><B>&lt;img vspace=# hspace=#&gt; #=value</B></H3>
+
+<DL>
+<DD><TT>&lt;img src=URL align=left vspace=10 hspace=20&gt;My Face!&lt;br&gt;<BR>
+It is always&lt;br&gt;<BR>
+smiling.&lt;br&gt;<BR>
+Hahaha....&lt;br&gt;</TT><BR>
+</DD>
+</DL>
+
+<P><IMG SRC="f.gif" ALT="(^_^)" HSPACE=20 VSPACE=10 HEIGHT=64 WIDTH=64 ALIGN=LEFT>My
+Face!<BR>
+It is always<BR>
+smiling.<BR>
+Hahaha....<BR>
+<BR clear=all>
+</P>
+
+<PRE>
+</PRE>
+
+<P><!--################## Border ########################--><A NAME="border"></A></P>
+
+<H2><IMG SRC="br20t.gif" ALT="+" HEIGHT=20 WIDTH=20 ALIGN=TOP> 边框</H2>
+
+<P><!------border-------></P>
+
+<H3><B>&lt;img border=#&gt; #=value</B></H3>
+
+<DL>
+<DD><TT>&lt;a href=&quot;URL&quot;&gt;<BR>
+&lt;img src=URL border=15&gt;<BR>
+&lt;/a&gt; </TT></DD>
+</DL>
+
+<P><A HREF="fh.gif"><IMG SRC="fh.gif" ALT="(^_^)" BORDER=15 HEIGHT=64 WIDTH=64></A>
+</P>
+
+<PRE>
+</PRE>
+
+<P><!--################## Client Side Image Map ########################--><A NAME="cmap"></A></P>
+
+<H2><IMG SRC="br20t.gif" ALT="+" HEIGHT=20 WIDTH=20 ALIGN=TOP> <A HREF="map.html">客户端图象映射图(Client Side Image Map)</A> </H2>
+
+<PRE>
+</PRE>
+
+<P><!--################## (^^) Jump & Add (^^) ########################-->
+<HR><A HREF="http://ncdesign.kyushu-id.ac.jp/"><IMG SRC="angel-homeg.gif" ALT="NCD HOME" HSPACE=3 VSPACE=10 BORDER=0 HEIGHT=46 WIDTH=55 ALIGN=LEFT></A>
+<B><A HREF="../html_design.html">HTML
+Design Guide Main Page<BR>
+<NOBR></A></B><FONT FACE="'Times New Roman', Arial"><FONT SIZE=-1><A HREF="html_design.html#content">Contents</A>
+|| <A HREF="page.html">Page</A>
+|| <A HREF="font.html">Font</A>
+|| <A HREF="text_style.html">Text
+Style</A> || <A HREF="image.html">Image</A>
+|| <A HREF="form.html">Form</A>
+|| <A HREF="table.html">Table</A>
+|| <A HREF="table02.html">Table
+Advanced</A> <BR>
+|| <A HREF="frame.html">Frames</A>
+|| <A HREF="marquee.html">Marquee</A>
+|| <A HREF="inline.html">Alternative
+Inline Elements</A> <BR>
+</FONT><FONT SIZE=-2><A HREF="tag-index.html">Tag
+Index</A> || <A HREF="new.html">What's
+New</A></FONT><FONT SIZE=-1> </FONT></FONT><BR clear=all>
+</P>
+
+<P>Network Communication Design<BR>
+<A HREF="http://ncdesign.kyushu-id.ac.jp/">http://ncdesign.kyushu-id.ac.jp/<BR>
+</A>C&amp;P 1994-1996 Yuriko Ienaga <FONT SIZE=-1><A HREF="mailto:v91102@vgenda.kyushu-id.ac.jp">v91102@vgenda.kyushu-id.ac.jp</A></FONT>
+<!--################## (^^) END (^^) ########################--></P>
+
+</BODY>
+</HTML>

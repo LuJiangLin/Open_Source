@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anssy.venturebar.base.dao.SlideInfoDao">
+    <resultMap id="BaseResultMap" type="com.anssy.venturebar.base.entity.SlideInfoEntity">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="IMAGE_URL" property="imageUrl" jdbcType="VARCHAR"/>
+        <result column="AD_URL" property="ad_Url" jdbcType="VARCHAR"/>
+        <result column="TITLE" property="title" jdbcType="VARCHAR"/>
+        <result column="MARK" property="mark" jdbcType="INTEGER"/>
+        <result column="TYPE" property="type" jdbcType="INTEGER"/>
+        <result column="CLICK_NUM" property="clickNum" jdbcType="BIGINT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, IMAGE_URL,AD_URL,TITLE,MARK,TYPE,CLICK_NUM
+    </sql>
+
+    <select id="findSlideList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from BASE_SLIDEINFO
+        where MARK=0 and TYPE=#{type,jdbcType=INTEGER}
+        order by ID desc
+    </select>
+
+    <update id="updateClickNum" parameterType="java.lang.Long">
+        update BASE_SLIDEINFO set CLICK_NUM=CLICK_NUM+1
+        where ID= #{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

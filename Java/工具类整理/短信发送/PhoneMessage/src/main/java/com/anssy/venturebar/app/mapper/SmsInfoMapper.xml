@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anssy.venturebar.app.dao.SmsInfoDao">
+    <resultMap id="BaseResultMap" type="com.anssy.venturebar.app.entity.SmsInfoEntity">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="SEND_TIME" property="sendTime" jdbcType="TIMESTAMP"/>
+        <result column="MOBILE" property="mobile" jdbcType="VARCHAR"/>
+        <result column="CONTENT" property="content" jdbcType="VARCHAR"/>
+        <result column="BALANCE" property="balance" jdbcType="BIGINT"/>
+        <result column="STATE" property="state" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, SEND_TIME, MOBILE, CONTENT, BALANCE, STATE
+    </sql>
+
+    <sql id="sequence_id">
+        sequence_app_smsInfo.nextVal
+    </sql>
+
+    <insert id="insertSMSInfo" parameterType="com.anssy.venturebar.app.entity.SmsInfoEntity">
+        insert into APP_SMSINFO
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                ID,
+            </if>
+            <if test="sendTime != null">
+                SEND_TIME,
+            </if>
+            <if test="mobile != null">
+                MOBILE,
+            </if>
+            <if test="content != null">
+                CONTENT,
+            </if>
+            <if test="balance != null">
+                BALANCE,
+            </if>
+            <if test="state != null">
+                STATE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id == null">
+                <include refid="sequence_id"/>
+                ,
+            </if>
+            <if test="sendTime != null">
+                #{sendTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="mobile != null">
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="balance != null">
+                #{balance,jdbcType=BIGINT},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+</mapper>

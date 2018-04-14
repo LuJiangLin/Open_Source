@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anssy.venturebar.base.dao.CityDao">
+    <resultMap id="BaseResultMap" type="com.anssy.venturebar.base.entity.CityEntity">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="CITY_ID" property="cityId" jdbcType="BIGINT"/>
+        <result column="CITY" property="city" jdbcType="VARCHAR"/>
+        <result column="PROVINCE_ID" property="provinceId" jdbcType="BIGINT"/>
+    </resultMap>
+    <resultMap id="AreaVoMap" type="com.anssy.venturebar.base.vo.AreaVo">
+        <result column="CITY_ID" property="areaId" jdbcType="BIGINT"/>
+        <result column="CITY" property="areaName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, CITY_ID, CITY, PROVINCE_ID
+    </sql>
+
+    <select id="findCityByProvinceId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from BASE_CITY
+        where PROVINCE_ID=#{provinceId,jdbcType=BIGINT}
+    </select>
+
+    <select id="findCityAreaVoAll" resultMap="AreaVoMap">
+        select CITY_ID, CITY from BASE_CITY
+    </select>
+
+    <select id="findCityByCityId" parameterType="java.lang.Long" resultType="java.lang.String">
+        select CITY from BASE_CITY where CITY_ID=#{cityId,jdbcType=BIGINT}
+    </select>
+
+    <select id="findCityIdByName" parameterType="java.lang.String" resultType="java.lang.Long">
+        select distinct CITY_ID from BASE_CITY
+        where CITY like '%'||#{name}||'%' and rownum=1
+    </select>
+
+    <select id="findProvinceId" parameterType="java.lang.Long" resultType="java.lang.Long">
+        select PROVINCE_ID from BASE_CITY
+        where CITY_ID=#{cityId,jdbcType=BIGINT}
+    </select>
+
+</mapper>

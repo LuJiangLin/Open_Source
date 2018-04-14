@@ -1,0 +1,207 @@
+ *本事例主要讲了如下几点: 
+ * 1:将图片转换为BASE64加密字符串. 
+ * 2:将图片流转换为BASE64加密字符串. 
+ * 3:将BASE64加密字符串转换为图片. 
+ * 4:在jsp文件中以引用的方式和BASE64加密字符串方式展示图片.
+
+首先看工具类:
+
+import java.awt.image.BufferedImage;  
+import java.io.ByteArrayInputStream;  
+import java.io.ByteArrayOutputStream;  
+import java.io.File;  
+import java.io.IOException;  
+import java.io.InputStream;  
+  
+import javax.imageio.ImageIO;  
+  
+import sun.misc.BASE64Decoder;  
+import sun.misc.BASE64Encoder;  
+  
+/** 
+ * @author IluckySi 
+ * @since 20150122 
+ */  
+public class ImageUtil {  
+  
+    private static BASE64Encoder encoder = new sun.misc.BASE64Encoder();  
+    private static BASE64Decoder decoder = new sun.misc.BASE64Decoder();  
+  
+    /** 
+     * 将图片转换为BASE64加密字符串. 
+     * @param imagePath 图片路径. 
+     * @param format 图片格式. 
+     * @return 
+     */  
+    public String convertImageToByte(String imagePath, String format) {  
+        File file = new File(imagePath);  
+        BufferedImage bi = null;  
+        ByteArrayOutputStream baos = null;  
+        String result = null;  
+        try {  
+            bi = ImageIO.read(file);  
+            baos = new ByteArrayOutputStream();  
+            ImageIO.write(bi, format == null ? "jpg" : format, baos);  
+            byte[] bytes = baos.toByteArray();  
+            result = encoder.encodeBuffer(bytes).trim();  
+            System.out.println("将图片转换为BASE64加密字符串成功！");  
+        } catch (IOException e) {  
+            System.out.println("将图片转换为 BASE64加密字符串失败: " + e);  
+        } finally {  
+            try {  
+                if(baos != null) {  
+                    baos.close();  
+                    baos = null;  
+                }  
+            } catch (Exception e) {  
+                System.out.println("关闭文件流发生异常: " + e);  
+            }  
+        }  
+        return result;  
+    }  
+      
+    /** 
+     * 将图片流转换为BASE64加密字符串. 
+     * @param imageInputStream 
+     * @param format 图片格式. 
+     * @return 
+     */  
+    public String convertImageStreamToByte(InputStream imageInputStream, String format) {  
+        BufferedImage bi = null;  
+        ByteArrayOutputStream baos = null;  
+        String result = null;  
+        try {  
+            bi = ImageIO.read(imageInputStream);  
+            baos = new ByteArrayOutputStream();  
+            ImageIO.write(bi, format == null ? "jpg" : format, baos);  
+            byte[] bytes = baos.toByteArray();  
+            result = encoder.encodeBuffer(bytes).trim();  
+            System.out.println("将图片流转换为BASE64加密字符串成功！");  
+        } catch (IOException e) {  
+            System.out.println("将图片流转换为 BASE64加密字符串失败: " + e);  
+        } finally {  
+            try {  
+                if(baos != null) {  
+                    baos.close();  
+                    baos = null;  
+                }  
+            } catch (Exception e) {  
+                System.out.println("关闭文件流发生异常: " + e);  
+            }  
+        }  
+        return result;  
+    }  
+      
+    /** 
+     * 将BASE64加密字符串转换为图片. 
+     * @param base64String 
+     * @param imagePath 图片生成路径. 
+     * @param format 图片格式. 
+     */  
+    public void convertByteToImage(String base64String, String imagePath, String format) {  
+        byte[] bytes = null;  
+        ByteArrayInputStream bais = null;  
+        BufferedImage bi = null;  
+        File file = null;  
+        try {  
+            bytes = decoder.decodeBuffer(base64String);  
+            bais = new ByteArrayInputStream(bytes);  
+            bi = ImageIO.read(bais);  
+            file = new File(imagePath);  
+            ImageIO.write(bi, format == null ? "jpg" : format, file);  
+            System.out.println("将BASE64加密字符串转换为图片成功！");  
+        } catch (IOException e) {  
+            System.out.println("将BASE64加密字符串转换为图片失败: " + e);  
+        } finally {  
+            try {  
+                if(bais != null) {  
+                    bais.close();  
+                    bais = null;  
+                }  
+            } catch (Exception e) {  
+                System.out.println("关闭文件流发生异常: " + e);  
+            }  
+        }  
+    }  
+}  
+
+然后看测试类：
+import java.io.InputStream;  
+  
+import com.ilucky.util.image.ImageUtil;  
+  
+/** 
+ * 本事例主要讲了如下几点: 
+ * 1:将图片转换为BASE64加密字符串. 
+ * 2:将图片流转换为BASE64加密字符串. 
+ * 3:将BASE64加密字符串转换为图片. 
+ * 4:在jsp文件中以引用的方式和BASE64加密字符串方式展示图片. 
+ * @author IluckySi 
+ * @since 20150122 
+ */  
+public class MainTest {  
+  
+    public static void main(String[] args) {  
+        ImageUtil imageUtil = new ImageUtil();  
+          
+        String base64String = imageUtil.convertImageToByte("D:\\test.png", "png");  
+        System.out.println(base64String);  
+        imageUtil.convertByteToImage(base64String, "D:\\test2.png", "png");  
+                  
+        InputStream is = MainTest.class.getResourceAsStream("test.png");  
+        String base64String2 = imageUtil.convertImageStreamToByte(is, "png");  
+        System.out.println(base64String2);  
+        imageUtil.convertByteToImage(base64String2, "D:\\test3.png", "png");  
+    }  
+}  
+
+最后看jsp文件:
+    <!DOCTYPE html>  
+    <html>  
+      <head>  
+        <title>index.html</title>  
+        <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">  
+        <meta http-equiv="description" content="this is my page">  
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">  
+      </head>  
+      <body>  
+        <!--   
+        data表示取得数据的协定名称,image/png是数据类型名称,base64 是数据的编码方法,  
+        逗号后面是image/png文件base64编码后的数据.   
+        data:text/css;base64,base64编码的CSS代码   
+        data:text/javascript,Javascript代码   
+        data:text/javascript;base64,base64编码的Javascript代码   
+        data:image/gif;base64,base64编码的gif图片数据   
+        data:image/png;base64,base64编码的png图片数据   
+        data:image/jpeg;base64,base64编码的jpeg图片数据   
+        data:image/x-icon;base64,base64编码的icon图片数据   
+         -->  
+        <img src="test.png"/>  
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAFYklEQVR42sVXfUyUdRz/8XKhMZQO  
+                7nmeuwMFwrBEVJqgDOcUHZvNuTarrdKam0zdKrckAy4goowxbaM5hE1yjVVzLjLRokBFz2qsQPGF  
+                F8vmamtkL4s4OHDy6ff5EQcXx91hf/jHB777fj8v3+d57p7nOQFA3EuoPxcLhV90SlxziOSeUrHd  
+                WRz5fv1uc1fl03OGizdGgmBd/5K5mzNyyO0M4EkEXqBAiI58Ed9WEFp1+MXYm1vW68hKM7AwJR5W  
+                mx3RZqsCa/Y4I4dcaqilx10t0PGqCOssEjuvH7H9vW1zEgzNgK5ZYVh02HUN86w65tvGwJo9zhRH  
+                cqmhlh70mtEC7a8Ie2ep6dPfW5eM3OnbhMo9S6GbLV6h04Eccqmhlh70omdQC3TsFbbLZaYL/W2Z  
+                wA+PYbQ9B780rUJu1nxoMZaAC5BDLjXU0oNe9KS33wXkqRKXXguv+as1HejOxYhzNdwS+G4NjlUs  
+                U0cX7+cscEYOudRQSw960ZPezPC9QIE69dv6Pk4exLX1GDm/Cu5z2Qojzmy4WrOxZUOSPELNz9Fr  
+                ikMuNR699KInvZkx/sH0WqB9rzCuH5j7Mzrk1uel8HQW3GcmgK+y4axOR0qCVX7gpoazxxk55E7W  
+                0oue9GYGs7wXKFCnP7+/cdEovs7GUHMm3C0rvHD7jMTZFSjYugAW89RvAXuckUPuf/X0pDczmMVM  
+                zwJyI8v3lVFX7pzLxMiXGXB/sdwncDoDvfXLkJFqh1WbuBSs2eOMnOn09GYGs5g5eYHcXw/HAWcz  
+                MfRZOtwSQz7APloexcHdD0GLnVhAlzV7nPnT8j8zmMVMzwKdjtCy/qPJuN0kSY1L/OL250tw61ga  
+                Nqy0Q7doCqzZ4yygXmYwi5meBa6Wmk4NNaRgpDEVQ8cX+YVbAk2L0VCcrL52BGv23AG0hMqQWcz0  
+                LNBTHtGFkw9D4UQQkLxR+X/LujiF0RMz0xIqc3yBb4sifmp+80G0lCcFhWYJZ0USDu6ar8C6OUit  
+                0sssZnoWaNhh+tFqGIg3dM9p9QvJM5t1vP1cvALrmWiZxUzPAidfMLWlJBjqZhKMiRarY+UiAzer  
+                5ymwZi8Y7dgNywAzPQuc3xNet3Ypv8+Bn3Y0sUqTQ3k24MM4BdZW3f9zYuKeoYNZzPQscNkRsv35  
+                1WbExhoBDXT5zN+4XMcfNVYMv2dTYM0eZ4H0zGAWMz0L9JaK1P1PRQ7EWa0Bn3aJdh2NL2vAEQ2u  
+                2jGwZo+zQHq7zJBZrusyc9IZEOEX8sM/yFxokafI8LO9jrx1GgaqY+CujYHr0BhYs5eXoynO9Kff  
+                ADOc+eEfyUyT19Owp0SsKd0U5eYrlU+xvMaLk3S0OcxAbTRcB73BHmdpSWNcn5dPejNDZq2d8jiW  
+                G4W07Q39JCctVr3T+br2ZY+bcac6CoPvzoGryhvscUaOr88CPenNDGb5fCPqKha2o3kRF1MTKfA+  
+                +uxHNNx4IwrDVZFwveMbnJFD7uSzQC960psZft8Je4rFkzXPzh5eME+HTTfUs94mbxx1W+cCVbMw  
+                uH82XNOAM3LIpUZppQe96EnvoN6K5TXaVfPMbCxO1BAVbeCJzBj89tYsDO+/DwOVEX5BDrmbpYZa  
+                etCLnkG/ll8qEqK7WOQe32lybs54AKd23I/RA+EYqDAFBXJPSg219KAXPWf8y+iKQxhXHaLyRklI  
+                363yUAzsC8OghGtfqE9wRg651FBLj7v/aTb+ul4oUi4VipIuh+i+WSKG+spC8Gd5CPr/BWv2OJOc  
+                Hsl9XWoW/v/fht5LhLUXiARZb71cJOquFIlv5BH2EqzZ40xyEsm9OJMfp/cS/wC6xRqbyM2GFQAA  
+                AABJRU5ErkJggg=="/>   
+      </body>  
+    </html>  

@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anssy.venturebar.site.dao.SiteInfoDao">
+    <resultMap id="BaseResultMap" type="com.anssy.venturebar.site.entity.SiteInfoEntity">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="SITE_IMAGE" property="siteImage" jdbcType="VARCHAR"/>
+        <result column="TYPE" property="type" jdbcType="BIGINT"/>
+        <result column="SITE_NAME" property="siteName" jdbcType="VARCHAR"/>
+        <result column="TITLE" property="title" jdbcType="VARCHAR"/>
+        <result column="PROVINCE_ID" property="provinceId" jdbcType="BIGINT"/>
+        <result column="CITY_ID" property="cityId" jdbcType="BIGINT"/>
+        <result column="AREA_ID" property="areaId" jdbcType="BIGINT"/>
+        <result column="LONGITUDE" property="longitude" jdbcType="VARCHAR"/>
+        <result column="LATITUDE" property="latitude" jdbcType="VARCHAR"/>
+        <result column="GEOHASH" property="geohash" jdbcType="VARCHAR"/>
+        <result column="PRICE" property="price" jdbcType="VARCHAR"/>
+        <result column="RENT" property="rent" jdbcType="VARCHAR"/>
+        <result column="ACREAGE" property="acreage" jdbcType="VARCHAR"/>
+        <result column="EMAIL" property="email" jdbcType="VARCHAR"/>
+        <result column="PV" property="pv" jdbcType="BIGINT"/>
+        <result column="WEIGHT" property="weight" jdbcType="BIGINT"/>
+        <result column="BEGIN_TIME" property="beginTime" jdbcType="TIMESTAMP"/>
+        <result column="END_TIME" property="endTime" jdbcType="TIMESTAMP"/>
+        <result column="PRAISE" property="praise" jdbcType="BIGINT"/>
+        <result column="STATE" property="state" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, SITE_IMAGE, TYPE, SITE_NAME, TITLE, PROVINCE_ID, CITY_ID, AREA_ID, LONGITUDE,
+        LATITUDE, GEOHASH, PRICE,RENT, ACREAGE, EMAIL, PV,WEIGHT,BEGIN_TIME,END_TIME, PRAISE, STATE
+    </sql>
+    <sql id="search_like">
+        and ( SITE_NAME like '%'||#{search}||'%' or TITLE like '%'||#{search}||'%' )
+    </sql>
+
+    <select id="findId" resultType="java.lang.Long">
+        select sequence_site_siteInfo.nextVal from dual
+    </select>
+
+    <select id="findSiteInfoById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from SITE_SITEINFO
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+
+    <update id="updatePV" parameterType="java.lang.Long">
+        update SITE_SITEINFO set PV=PV+1 where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updatePraise" parameterType="java.lang.Long">
+        update SITE_SITEINFO set PRAISE=PRAISE+1 where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateWeight">
+        update SITE_SITEINFO set WEIGHT=#{1} where ID =#{0}
+    </update>
+
+    <delete id="deleteSiteInfo" parameterType="java.lang.Long">
+        delete from SITE_SITEINFO
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteAllSiteInfo">
+        delete from SITE_SITEINFO
+    </delete>
+
+    <update id="overdue" parameterType="java.util.Date">
+        update SITE_SITEINFO set STATE=2 where
+        <![CDATA[ to_char(END_TIME,'yy-mm-dd hh24:mi:ss') <= to_char(#{time,jdbcType=TIMESTAMP},'yy-mm-dd hh24:mi:ss')
+
+        ]]>
+    </update>
+
+    <select id="findListByGPS" resultMap="BaseResultMap" parameterType="com.anssy.webcore.vo.GPSVo">
+        select
+        <include refid="Base_Column_List"/>
+        from SITE_SITEINFO where STATE=1
+        <if test="search!=null">
+            <include refid="search_like"/>
+        </if>
+        and GEOHASH like CONCAT(#{geohash},'%')
+    </select>
+
+    <select id="findListByPv" resultMap="BaseResultMap" parameterType="com.anssy.venturebar.site.vo.PvVo">
+        select
+        <include refid="Base_Column_List"/>
+        from SITE_SITEINFO where rowid in
+        (select rid from
+        (select rownum rn,rid from
+        (select rowid rid from SITE_SITEINFO where STATE=1
+        <if test="search!=null">
+            <include refid="search_like"/>
+        </if>
+        <if test="provinceId!=null">
+            and PROVINCE_ID=#{provinceId,jdbcType=BIGINT}
+            <if test="cityId!=null">
+                and CITY_ID=#{cityId,jdbcType=BIGINT}
+                <if test="areaId!=null">
+                    and AREA_ID=#{areaId,jdbcType=BIGINT}
+                </if>
+            </if>
+        </if>
+        order by
+        <if test="capacityType==0">
+            PV
+        </if>
+        <if test="capacityType==1">
+            PRAISE
+        </if>
+        <if test="capacityType==2">
+            WEIGHT
+        </if>
+        desc )
+        where <![CDATA[ rownum <=#{end,jdbcType=INTEGER} ]]>  )
+        where <![CDATA[ rn >=#{being,jdbcType=INTEGER} ]]>  )
+        order by
+        <if test="capacityType==0">
+            PV
+        </if>
+        <if test="capacityType==1">
+            PRAISE
+        </if>
+        <if test="capacityType==2">
+            WEIGHT
+        </if>
+        desc
+    </select>
+
+    <select id="findListByType" resultMap="BaseResultMap"
+            parameterType="com.anssy.venturebar.site.vo.SiteTypeVo">
+        select
+        <include refid="Base_Column_List"/>
+        from SITE_SITEINFO where rowid in
+        (select rid from
+        (select rownum rn,rid from
+        (select rowid rid from SITE_SITEINFO where STATE=1
+        <if test="search!=null">
+            <include refid="search_like"/>
+        </if>
+        <if test="type!=null">
+            and TYPE=#{type,jdbcType=BIGINT}
+        </if>
+        <if test="type==null">
+            and TYPE in
+            <foreach collection="types" item="type" open="(" separator="," close=")">
+                #{type}
+            </foreach>
+        </if>
+        <if test="provinceId!=null">
+            and PROVINCE_ID=#{provinceId,jdbcType=BIGINT}
+            <if test="cityId!=null">
+                and CITY_ID=#{cityId,jdbcType=BIGINT}
+                <if test="areaId!=null">
+                    and AREA_ID=#{areaId,jdbcType=BIGINT}
+                </if>
+            </if>
+        </if>
+        order by WEIGHT desc)
+        where <![CDATA[ rownum <=#{end,jdbcType=INTEGER} ]]>  )
+        where <![CDATA[ rn >=#{being,jdbcType=INTEGER} ]]>  )
+        order by WEIGHT desc
+    </select>
+
+    <select id="referrals" resultMap="BaseResultMap"
+            parameterType="com.anssy.webcore.vo.ReferralsVo">
+        select
+        <include refid="Base_Column_List"/>
+        from SITE_SITEINFO where rowid in
+        (select rid from
+        (select rownum rn,rid from
+        (select rowid rid from SITE_SITEINFO where STATE=1
+        <if test="provinceId!=null">
+            and PROVINCE_ID=#{provinceId,jdbcType=BIGINT}
+            <if test="cityId!=null">
+                and CITY_ID=#{cityId,jdbcType=BIGINT}
+                <if test="areaId!=null">
+                    and AREA_ID=#{areaId,jdbcType=BIGINT}
+                </if>
+            </if>
+        </if>
+        order by PRAISE desc )
+        where <![CDATA[ rownum <=#{count,jdbcType=INTEGER} ]]>  )
+        where <![CDATA[ rn >=1 ]]>  )
+        order by PRAISE desc
+    </select>
+
+    <select id="findMyPublish" resultMap="BaseResultMap"
+            parameterType="com.anssy.webcore.vo.MyVo">
+        select
+        <include refid="Base_Column_List"/>
+        from SITE_SITEINFO where rowid in
+        (select rid from
+        (select rownum rn,rid from
+        (select info.rowid rid from SITE_SITEINFO info
+        left join SITE_SITEITEM item
+        on info.ID=item.SITE_ID
+        where 1=1
+        <if test="search!=null">
+            <include refid="search_like"/>
+        </if>
+        and item.PUBLISH_ID=#{publishId,jdbcType=BIGINT}
+        order by info.ID desc)
+        where <![CDATA[ rownum <=#{end,jdbcType=INTEGER} ]]>)
+        where <![CDATA[ rn >=#{being,jdbcType=INTEGER} ]]>)
+        order by ID desc
+    </select>
+
+    <select id="findCollect" resultMap="BaseResultMap"
+            parameterType="com.anssy.webcore.vo.CollectVo">
+        select
+        <include refid="Base_Column_List"/>
+        from SITE_SITEINFO where rowid in
+        (select rid from
+        (select rownum rn,rid from
+        (select rowid rid from SITE_SITEINFO where 1=1
+        <if test="search!=null">
+            <include refid="search_like"/>
+        </if>
+        and ID in
+        (select FID from COLLECT_COLLECTINFO where TYPE=#{type,jdbcType=INTEGER} and
+        COLLECT_ID=#{collectId,jdbcType=BIGINT})
+        order by ID desc)
+        where <![CDATA[ rownum <=#{end,jdbcType=INTEGER} ]]>)
+        where <![CDATA[ rn >=#{being,jdbcType=INTEGER} ]]>)
+        order by ID desc
+    </select>
+
+    <insert id="insertSiteInfo" parameterType="com.anssy.venturebar.site.entity.SiteInfoEntity">
+        insert into SITE_SITEINFO
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="siteImage != null">
+                SITE_IMAGE,
+            </if>
+            <if test="type != null">
+                TYPE,
+            </if>
+            <if test="siteName != null">
+                SITE_NAME,
+            </if>
+            <if test="title != null">
+                TITLE,
+            </if>
+            <if test="provinceId != null">
+                PROVINCE_ID,
+            </if>
+            <if test="cityId != null">
+                CITY_ID,
+            </if>
+            <if test="areaId != null">
+                AREA_ID,
+            </if>
+            <if test="longitude != null">
+                LONGITUDE,
+            </if>
+            <if test="latitude != null">
+                LATITUDE,
+            </if>
+            <if test="geohash != null">
+                GEOHASH,
+            </if>
+            <if test="price != null">
+                PRICE,
+            </if>
+            <if test="rent != null">
+                RENT,
+            </if>
+            <if test="acreage != null">
+                ACREAGE,
+            </if>
+            <if test="email != null">
+                EMAIL,
+            </if>
+            <if test="pv != null">
+                PV,
+            </if>
+            <if test="weight != null">
+                WEIGHT,
+            </if>
+            <if test="beginTime != null">
+                BEGIN_TIME,
+            </if>
+            <if test="endTime != null">
+                END_TIME,
+            </if>
+            <if test="state != null">
+                STATE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="siteImage != null">
+                #{siteImage,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=BIGINT},
+            </if>
+            <if test="siteName != null">
+                #{siteName,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="provinceId != null">
+                #{provinceId,jdbcType=BIGINT},
+            </if>
+            <if test="cityId != null">
+                #{cityId,jdbcType=BIGINT},
+            </if>
+            <if test="areaId != null">
+                #{areaId,jdbcType=BIGINT},
+            </if>
+            <if test="longitude != null">
+                #{longitude,jdbcType=VARCHAR},
+            </if>
+            <if test="latitude != null">
+                #{latitude,jdbcType=VARCHAR},
+            </if>
+            <if test="geohash != null">
+                #{geohash,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=VARCHAR},
+            </if>
+            <if test="rent != null">
+                #{rent,jdbcType=VARCHAR},
+            </if>
+            <if test="acreage != null">
+                #{acreage,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="pv != null">
+                #{pv,jdbcType=BIGINT},
+            </if>
+            <if test="weight != null">
+                #{weight,jdbcType=BIGINT},
+            </if>
+            <if test="beginTime != null">
+                #{beginTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateSiteInfo"
+            parameterType="com.anssy.venturebar.site.entity.SiteInfoEntity">
+        update SITE_SITEINFO
+        set
+        SITE_IMAGE=#{siteImage,jdbcType=VARCHAR},
+        TYPE= #{type,jdbcType=BIGINT},
+        SITE_NAME= #{siteName,jdbcType=VARCHAR},
+        TITLE=#{title,jdbcType=VARCHAR},
+        PROVINCE_ID= #{provinceId,jdbcType=BIGINT},
+        CITY_ID=#{cityId,jdbcType=BIGINT},
+        AREA_ID=#{areaId,jdbcType=BIGINT},
+        LONGITUDE= #{longitude,jdbcType=VARCHAR},
+        LATITUDE=#{latitude,jdbcType=VARCHAR},
+        GEOHASH=#{geohash,jdbcType=VARCHAR},
+        PRICE=#{price,jdbcType=VARCHAR},
+        RENT=#{rent,jdbcType=VARCHAR},
+        ACREAGE=#{acreage,jdbcType=VARCHAR},
+        EMAIL=#{email,jdbcType=VARCHAR},
+        PV= #{pv,jdbcType=BIGINT},
+        WEIGHT=#{weight,jdbcType=BIGINT},
+        BEGIN_TIME=#{beginTime,jdbcType=TIMESTAMP},
+        END_TIME=#{endTime,jdbcType=TIMESTAMP},
+        STATE=#{state,jdbcType=INTEGER}
+        where ID= #{id,jdbcType=BIGINT}
+    </update>
+</mapper>
